@@ -37,27 +37,29 @@ Font.SELECTED  : 反显
 紫红色：暂定
 黑色：无（黑色哪看得见？）
 """
-
-import random
-import wget
-import json
-import requests
-import os,sys
-import time
-import base64
-import tkinter.messagebox
-import asyncio
-from time import sleep
-
-os.system(r'title MayDOS') #更改标题
+try:
+    import random
+    import wget
+    import json
+    import requests
+    import os,sys
+    import time
+    import base64
+    import tkinter.messagebox
+    import asyncio
+    from time import sleep
+except Exception as e:
+    print(e)
+    input('按下回车键退出...')
+    quit()
+    
+os.system(r'title MayDOS') # 更改标题
 
 # 环境设置
 if os.name == "nt":
     os.system("")
     
-"""
-自动生成/补全 部分文件
-"""
+# 自动生成/补全 部分文件
 if os.path.isdir('MayDOS_Login/') == False:
     os.makedirs('MayDOS_Login/')
 if os.path.isdir('important/') == False:
@@ -156,14 +158,11 @@ async def check_update():
     # 读取更新日志
     Update = json.loads(requests.get("https://buelie.github.io/MayDOS/config.json").text)
 
-    # 当前版本号
-    CODE = "0.5.0"
-
     # 比较版本号
     if Update["latest"]["default"] != CODE:
-        Y_N_U = tkinter.messagebox.askyesno(title='更新提示',message=f'有可用更新，是否下载?\n当前版本:{CODE} -> {Update["latest"]["default"]}\n稍等一下，马上就好，在important/download/找到更新程序并运行即可')
-        if Y_N_U == True:
-            # 如果条件为真则执行该线程
+        Y_N_U = tkinter.messagebox.askyesno(title='更新提示',message=f'有可用更新，是否下载?\n当前版本: {CODE} -> {Update["latest"]["default"]}\n稍等一下，马上就好，在important/download/找到更新程序并运行即可')
+        
+        if Y_N_U == True:   # 如果条件为真则执行该线程
 
             # 检测文件是否存在,如果存在则执行销毁操作
             if os.path.isfile('update.py'):
@@ -184,68 +183,23 @@ async def check_update():
         os.system("cls")
 
 # 变量设置
-HOMO = False
-
-# 以asyncio调用check_update_bar函数
-asyncio.run(check_update_bar())
-
-time_0 = 0.03 # 动画间隔时间
-
-# 打印动画(不要将其存储进文本文件,会读取错误)
-print("MMMMMMMM               MMMMMMMM                                             DDDDDDDDDDDDD             OOOOOOOOO        SSSSSSSSSSSSSSS ")
-time.sleep(time_0)
-print("M:::::::M             M:::::::M                                             D::::::::::::DDD        OO:::::::::OO    SS:::::::::::::::S")
-time.sleep(time_0)
-print("M::::::::M           M::::::::M                                             D:::::::::::::::DD    OO:::::::::::::OO S:::::SSSSSS::::::S")
-time.sleep(time_0)
-print("M:::::::::M         M:::::::::M                                             DDD:::::DDDDD:::::D  O:::::::OOO:::::::OS:::::S     SSSSSSS")
-time.sleep(time_0)
-print("M::::::::::M       M::::::::::M  aaaaaaaaaaaaayyyyyyy           yyyyyyy       D:::::D    D:::::D O::::::O   O::::::OS:::::S            ")
-time.sleep(time_0)
-print("M:::::::::::M     M:::::::::::M  a::::::::::::ay:::::y         y:::::y        D:::::D     D:::::DO:::::O     O:::::OS:::::S            ")
-time.sleep(time_0)
-print("M:::::::M::::M   M::::M:::::::M  aaaaaaaaa:::::ay:::::y       y:::::y         D:::::D     D:::::DO:::::O     O:::::O S::::SSSS         ")
-time.sleep(time_0)
-print("M::::::M M::::M M::::M M::::::M           a::::a y:::::y     y:::::y          D:::::D     D:::::DO:::::O     O:::::O  SS::::::SSSSS    ")
-time.sleep(time_0)
-print("M::::::M  M::::M::::M  M::::::M    aaaaaaa:::::a  y:::::y   y:::::y           D:::::D     D:::::DO:::::O     O:::::O    SSS::::::::SS  ")
-time.sleep(time_0)
-print("M::::::M   M:::::::M   M::::::M  aa::::::::::::a   y:::::y y:::::y            D:::::D     D:::::DO:::::O     O:::::O       SSSSSS::::S ")
-time.sleep(time_0)
-print("M::::::M    M:::::M    M::::::M a::::aaaa::::::a    y:::::y:::::y             D:::::D     D:::::DO:::::O     O:::::O            S:::::S")
-time.sleep(time_0)
-print("M::::::M     MMMMM     M::::::Ma::::a    a:::::a     y:::::::::y              D:::::D    D:::::D O::::::O   O::::::O            S:::::S")
-time.sleep(time_0)
-print("M::::::M               M::::::Ma::::a    a:::::a      y:::::::y             DDD:::::DDDDD:::::D  O:::::::OOO:::::::OSSSSSSS     S:::::S")
-time.sleep(time_0)
-print("M::::::M               M::::::Ma:::::aaaa::::::a       y:::::y              D:::::::::::::::DD    OO:::::::::::::OO S::::::SSSSSS:::::S")
-time.sleep(time_0)
-print("M::::::M               M::::::M a::::::::::aa:::a     y:::::y               D::::::::::::DDD        OO:::::::::OO   S:::::::::::::::SS ")
-time.sleep(time_0)
-print("MMMMMMMM               MMMMMMMM  aaaaaaaaaa  aaaa    y:::::y                DDDDDDDDDDDDD             OOOOOOOOO      SSSSSSSSSSSSSSS   ")
-time.sleep(time_0)
-print("                                                    y:::::y                                                                            ")
-time.sleep(time_0)
-print("                                                   y:::::y                                                                             ")
-time.sleep(time_0)
-print("                                                  y:::::y                                                                              ")
-time.sleep(time_0)
-print("                                                 y:::::y                                                                               ")
-time.sleep(time_0)
-print("                                                yyyyyyy                                                                                ")
-time.sleep(time_0)
-print("================================================================ May DOS V0.5.0 ================================================================")
-
-# 变量设置
 error_version_file_not_found = False
 error_account_file_not_found = False
 
 try:
-    ver_open= open('important/Version.ver',mode='r')
+    ver_open= open('important/Version.ver', mode='r')
     ver_open.seek(0, 0)
-    Ver = ver_open.read()
-except  FileNotFoundError:
+    CODE = ver_open.read()
+except FileNotFoundError:
     error_version_file_not_found = True
+
+# 以asyncio调用check_update_bar函数
+asyncio.run(check_update_bar())
+
+# 打印动画(不要将其存储进文本文件,会读取错误)
+with open("icon.txt", "r") as icon:
+    for text in icon.readlines():
+        print(text)
 
 try:
     account_open = open('important/account.user',mode='r')
@@ -286,13 +240,11 @@ elif error_account_file_not_found  and error_version_file_not_found == True:
     input('按下回车键退出...')
     quit()
     
-if username == 'TEST':
-    print(account_info)
-
 print(f'{Font.GREEN}Welcome!')
 
 while True:
     if username == 'TEST':
+        print(account_info)
         print(f'{Font.BLUE}test_account_auto_login{Font.WHITE}')
     else:
         print(f'{Font.BEIGE}登录{username}的电脑{Font.WHITE}')
@@ -313,7 +265,7 @@ time.sleep(0.25)
 SysPerAPI().cls()
 
 print(f'{Font.GREEN}正在准备你的MayDOS命令行......{Font.WHITE}')
-print(f'{Font.GREEN}请输入"usebook"以打开MayDOS0.1的使用手册和帮助{Font.WHITE}')
+print(f'{Font.GREEN}请输入"usebook"以打开MayDOS{CODE}的使用手册和帮助{Font.WHITE}')
 time.sleep(0.02)
 
 while True:
@@ -394,7 +346,7 @@ while True:
             os.popen(search_cmd)
             print(" ")
 
-    elif cmd.lower() == 'usebook'  or cmd.lower() == 'help':
+    elif cmd.lower() == 'usebook' or cmd.lower() == 'help':
         print(f'{Font.GREEN}SEARCH           互联网搜索')
         print(f'{Font.GREEN}USEBOOK          获取帮助')
         print(f'{Font.GREEN}HELP             获取帮助')
@@ -429,15 +381,19 @@ while True:
     elif cmd.lower() == 'notepad':
         try:
             ENCO_FILE = 'w'
+
             print('\n选择编辑模式 -->')
             print('1.正常写入')
             print('2.系统权限写入')
             print('3.特殊文件写入')
+
             print(f'{Font.YELLOW}================')
             print(f'{Font.BEIGE}exit        退出')
             print(f'{Font.BEIGE}path    文件路径{Font.WHITE}\n')
             print(f'{Font.BEIGE}enco    读取方式{Font.WHITE}\n')
+
             Notepad = input('MayDOS/Apply/NOTEPAD>>>')
+
             if Notepad == 'exit':
                 print('\n')
             elif Notepad == '1':
@@ -448,6 +404,7 @@ while True:
                     f.close()
             #SysPerAPI().cls()
             #os.system('python important/Applications/Notepad/Notepad.py')
+
         except Exception as e:
             print(f'{Font.RED}MayDOS/Root/ERROR>>>{e}{Font.WHITE}')
 
@@ -462,43 +419,16 @@ while True:
         SysPerAPI().cls()
 
     elif cmd == username:
-        JiTanLaiLuo = 0
         List_RAN = ['MayDOS有摸鱼部门和搞事部门！','0.4.1是0.4.2之前最多BUG的版本',
         'MayDOS其实从0.4.0开始就有可安装版本了呢~','MayDOS的安装版本自动更新会报错！',
         'MayDOS现在已经有很多人参与开发了呢','MayDOS的开发人员似乎对MayDOS没有激情',
         'MayDOS的软件API其实和TinOS一样','MayDOS的软件可以无缝移植到TinOS哦!~',
         '其实OOBE中的更新通道仔细一看就感觉不对劲','你知道MayDOS其实在0.4以后有了阁小小的GUI吗？']
-
-        if HOMO == True:
-            print('       　  ▃▆█▇▄▖')
-            print('　 　 　 ▟◤▖　　　◥█▎')
-            print('   　 ◢◤　 ▐　　　 　▐▉')
-            print('　 ▗◤　　　▂　▗▖　　▕█▎')
-            print('　◤　▗▅▖◥▄　▀◣　　█▊')
-            print('  ▐　▕▎◥▖◣◤　　◢██')
-            print('  █◣ 　◥▅█▀　　　▐██◤')
-            print('  ▐█▙▂　　     ◢██◤')
-            print('  ◥██◣　　　　◢▄◤')
-            print(' 　　  ▀██▅▇▀')
-            print('11451419198101145141919810')
-            print('11451419198101145141919810')
-            print('11451419198101145141919810')
-            print('11451419198101145141919810')
-            print('homo面目狰狞！！！！！！！！')
+        for text in List_RAN:
+            print(text)
     
-        while True:
-            if JiTanLaiLuo != 20 and JiTanLaiLuo < 20:
-                tkinter.messagebox.showerror(title="嗨嗨嗨",message="鸡汤来咯!")
-                JiTanLaiLuo += 1
-            elif JiTanLaiLuo >= 20 and JiTanLaiLuo < 30 :
-                tkinter.messagebox.showwarning(title="嗨嗨嗨",message="鸡汤来咯!鸡汤来咯!鸡汤来咯!鸡汤来咯!")
-                JiTanLaiLuo += 1
-            elif JiTanLaiLuo >= 30:
-                tkinter.messagebox.showingo(title="你知道吗?",message=f'{random.choice(List_RAN)}')
-                JiTanLaiLuo += 1
-
     elif cmd.lower() =='sysver':
-        print(f'系统版本：MayDOS {Ver}')
+        print(f'系统版本：MayDOS {CODE}')
         print('\n开发：MayDOS开发团队 版权所有2023(C)')
     else:
         print(f"{Font.YELLOW}未定义的指令，请输入'usebook'以查看使用手册和帮助{Font.WHITE}")
