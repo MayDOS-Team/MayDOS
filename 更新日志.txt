@@ -4,7 +4,7 @@
 0.5.1:
 
 * 将所有的类似于“if cmd == 'exit' or cmd == 'Exit':”等全部改为“类似于cmd.lower() = 'exit':”的语句
- * 移除了HIM
+  * 移除了HIM
 
 
 0.5.0:
