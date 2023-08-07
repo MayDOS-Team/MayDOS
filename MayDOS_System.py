@@ -161,7 +161,7 @@ async def check_update():
 
     # 比较版本号
     if Update["latest"]["default"] != CODE:
-        Y_N_U = tkinter.messagebox.askyesno(title='更新提示',message=f'有可用更新，是否下载?\n当前版本:{code} -> {Update["latest"]["default"]}\n稍等一下，马上就好，在important/download/找到更新程序并运行即可')
+        Y_N_U = tkinter.messagebox.askyesno(title='更新提示',message=f'有可用更新，是否下载?\n当前版本:{CODE} -> {Update["latest"]["default"]}\n稍等一下，马上就好，在important/download/找到更新程序并运行即可')
         if Y_N_U == True:
             # 如果条件为真则执行该线程
 
@@ -182,7 +182,9 @@ async def check_update():
             os.system("cls")
     else:
         os.system("cls")
+
 # 变量设置
+HOMO = False
 
 # 以asyncio调用check_update_bar函数
 asyncio.run(check_update_bar())
@@ -232,7 +234,7 @@ print("                                                 y:::::y                 
 time.sleep(time_0)
 print("                                                yyyyyyy                                                                                ")
 time.sleep(time_0)
-print("================================================================ May DOS V0.5.1 ================================================================")
+print("================================================================ May DOS V0.5.0 ================================================================")
 
 # 变量设置
 error_version_file_not_found = False
@@ -316,7 +318,7 @@ time.sleep(0.02)
 
 while True:
     cmd = input('MayDOS/Root>>>')
-    
+
     if cmd.lower() == 'calc' :
         os.system('python important/Applications/calc.py')
 
@@ -344,7 +346,7 @@ while True:
         except Exception as e:
             print(f'{Font.RED}MayDOS/Root>>>{e}')
 
-    elif cmd[0:4].lower() = 'down':
+    elif cmd[0:4].lower() == 'down':
         print("=======================================")
         print("|请选择下载源                         |            \n|1.STORE 默认的应用商店 2.HTTP网络渠道|\n|3.退出                               |")
         print("=======================================")
@@ -375,7 +377,7 @@ while True:
             print("未知操作,已自动退出......")
             print("===================================================")
 
-    elif cmd == "":
+    elif cmd.lower() == "":
         pass
 
     elif cmd[0:6].lower() == 'search':
@@ -458,6 +460,7 @@ while True:
 
     elif cmd.lower() == 'cls':
         SysPerAPI().cls()
+
     elif cmd == username:
         JiTanLaiLuo = 0
         List_RAN = ['MayDOS有摸鱼部门和搞事部门！','0.4.1是0.4.2之前最多BUG的版本',
@@ -465,6 +468,24 @@ while True:
         'MayDOS现在已经有很多人参与开发了呢','MayDOS的开发人员似乎对MayDOS没有激情',
         'MayDOS的软件API其实和TinOS一样','MayDOS的软件可以无缝移植到TinOS哦!~',
         '其实OOBE中的更新通道仔细一看就感觉不对劲','你知道MayDOS其实在0.4以后有了阁小小的GUI吗？']
+
+        if HOMO == True:
+            print('       　  ▃▆█▇▄▖')
+            print('　 　 　 ▟◤▖　　　◥█▎')
+            print('   　 ◢◤　 ▐　　　 　▐▉')
+            print('　 ▗◤　　　▂　▗▖　　▕█▎')
+            print('　◤　▗▅▖◥▄　▀◣　　█▊')
+            print('  ▐　▕▎◥▖◣◤　　◢██')
+            print('  █◣ 　◥▅█▀　　　▐██◤')
+            print('  ▐█▙▂　　     ◢██◤')
+            print('  ◥██◣　　　　◢▄◤')
+            print(' 　　  ▀██▅▇▀')
+            print('11451419198101145141919810')
+            print('11451419198101145141919810')
+            print('11451419198101145141919810')
+            print('11451419198101145141919810')
+            print('homo面目狰狞！！！！！！！！')
+    
         while True:
             if JiTanLaiLuo != 20 and JiTanLaiLuo < 20:
                 tkinter.messagebox.showerror(title="嗨嗨嗨",message="鸡汤来咯!")

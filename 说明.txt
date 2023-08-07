@@ -4,5 +4,47 @@
 如果出现系统文件丢失，启动OOBE可自动补全
 
 # 自动更新
-自动更新目前仅会自动下载，需运行important/download/main.py以下载更新并手动将更新文件替换
+自动更新目前仅会自动下载，需运行important/download/main.py以下载更新并手动将更新文件替换 -废 (2023.8.5)
 (正在研究实现方法中)
+
+# 系统开发
+彩色文本 -->
+"""
+colorama现已弃用
+
+字体样式 -->
+Font.BLACK     : 黑色
+Font.RED       : 红色
+Font.GREEN     : 绿色
+Font.YELLOW    : 黄色
+Font.BLUE      : 蓝色
+Font.VIOLET    :
+Font.BEIGE     : 青蓝色
+Font.WHITE     : 白色
+
+字体背景样式 -->
+Font.BLACK     : 黑色
+Font.RED       : 红色
+Font.GREEN     : 绿色
+Font.YELLOW    : 黄色
+Font.BLUE      : 蓝色
+Font.VIOLET
+Font.WHITE     : 绿色
+
+字体特性/特效 -->
+Font.END       : 终端默认设置
+Font.BOLD      : 高亮显示
+Font.ITALIC    : 斜体文本
+Font.URL       : 下划线
+Font.BLINK     : 闪烁
+Font.BLINK2    : 未知
+Font.SELECTED  : 反显
+
+系统颜色表示说明 -->
+绿色：提示，正确
+红色：警告，错误
+黄色：警告，错误（比红色弱一点）
+浅蓝色/青蓝色/蓝色：信息，属性
+紫红色：暂定
+黑色：无（黑色哪看得见？）
+"""
