@@ -19,7 +19,7 @@ if os.path.isdir('important/download') == False:
     os.makedirs('important/download')
 if os.path.isfile('important/Version.ver') == False:
     with open('important/Version.ver','w',encoding='gbk') as f:
-        f.write("V0.4.2 内测版\n")
+        f.write("V0.5.3 内测版\n")
         f.close()
 if os.path.isfile('important/download/cg.txt') == False:
     path_url = os.getcwd() + "\\"
@@ -27,7 +27,7 @@ if os.path.isfile('important/download/cg.txt') == False:
         f.write(path_url)
         f.close()
 if os.path.isfile('important/Applications/sys.json') == False:
-    SYS_0 = {"Name":"0.5.1","description":"a cui dos"}
+    SYS_0 = {"Name":"0.5.3","description":"a cui dos"}
     with open('important/Applications/sys.json','w') as f:
         SYS_1 = json.dumps(SYS_0,sort_keys=True, indent=4, separators=(',', ':'))
         f.write(SYS_1)
