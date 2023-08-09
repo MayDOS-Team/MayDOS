@@ -7,31 +7,6 @@ from time import sleep
 
 if os.name == "nt":
     os.system("")
-if os.path.isdir('MayDOS_Login/') == False:
-    os.makedirs('MayDOS_Login/')
-if os.path.isdir('important/') == False:
-    os.makedirs('important/')
-if os.path.isdir('important/Applications') == False:
-    os.makedirs('important/Applications')
-if os.path.isdir('important/log') == False:
-    os.makedirs('important/log')
-if os.path.isdir('important/download') == False:
-    os.makedirs('important/download')
-if os.path.isfile('important/Version.ver') == False:
-    with open('important/Version.ver','w',encoding='gbk') as f:
-        f.write("V0.5.3 内测版\n")
-        f.close()
-if os.path.isfile('important/download/cg.txt') == False:
-    path_url = os.getcwd() + "\\"
-    with open('important/download/cg.txt','w') as f:
-        f.write(path_url)
-        f.close()
-if os.path.isfile('important/Applications/sys.json') == False:
-    SYS_0 = {"Name":"0.5.3","description":"a cui dos"}
-    with open('important/Applications/sys.json','w') as f:
-        SYS_1 = json.dumps(SYS_0,sort_keys=True, indent=4, separators=(',', ':'))
-        f.write(SYS_1)
-        f.close()
 
 # 彩色自定义文本
 class Style:
@@ -63,6 +38,43 @@ class Background:
     BEIGE = '\33[46m'
     WHITE = '\33[47m'
 
+try:
+    readversion = open('important/Version.ver',mode='r')
+    readversion.seek(0, 0)
+    version = readversion.read()
+    readversion.close()
+except FileNotFoundError:
+    print(f'{Font.RED}ERROR：无法找到文件Version.ver{Font.WHITE}')
+    input('按任意键退出. . .')
+    quit()
+
+if os.path.isdir('MayDOS_Login/') == False:
+    os.makedirs('MayDOS_Login/')
+if os.path.isdir('important/') == False:
+    os.makedirs('important/')
+if os.path.isdir('important/Applications') == False:
+    os.makedirs('important/Applications')
+if os.path.isdir('important/log') == False:
+    os.makedirs('important/log')
+if os.path.isdir('important/download') == False:
+    os.makedirs('important/download')
+if os.path.isfile('important/Version.ver') == False:
+    with open('important/Version.ver','w',encoding='gbk') as f:
+        f.write(f"{version}\n")
+        f.close()
+if os.path.isfile('important/download/cg.txt') == False:
+    path_url = os.getcwd() + "\\"
+    with open('important/download/cg.txt','w') as f:
+        f.write(path_url)
+        f.close()
+if os.path.isfile('important/Applications/sys.json') == False:
+    SYS_0 = {"Name":version,"description":"a cui dos"}
+    with open('important/Applications/sys.json','w') as f:
+        SYS_1 = json.dumps(SYS_0,sort_keys=True, indent=4, separators=(',', ':'))
+        f.write(SYS_1)
+        f.close()
+
+
 tk = tk.Tk()
 
 tk.withdraw()
@@ -70,19 +82,9 @@ tk.withdraw()
 check_files = os.listdir('important/')
 account_existed = check_files[0]
 if account_existed == 'account.user':
-    print(f'{Font.YELLOW}You have already registered{Font.WHITE}')
-    input('Press Enter to close...')
+    print(f'{Font.YELLOW}您已经注册过了{Font.WHITE}')
+    input('按任意键退出. . .')
     os.system("START start.bat")
-    quit()
-
-try:
-    readversion = open('important/Version.ver',mode='r')
-    readversion.seek(0, 0)
-    version = readversion.read()
-    readversion.close()
-except FileNotFoundError:
-    print(f'{Font.RED}ERROR_Version_File_Not_Found{Font.WHITE}')
-    input('Press Enter to close...')
     quit()
 
 def cls():
@@ -95,17 +97,17 @@ def ctd():
         print('\r下一步...{}'.format(list[index]),end='',flush=True)
         sleep(1)
 
-print(f'MayDOS {version} OOBE starting up...')
+print(f'MayDOS {version} OOBE 启动中. . .')
 sleep(2)
-input('Press Enter to setup your system')
+input('按任意键启动系统')
 cls()
 
 while True:     #Default Language Set
-    print('Please choose your default language')
-    print('C-Simple Chinese')
-    lang = input('>')
-    if lang == 'C' or lang == 'c' or lang == 'chinese' or lang == 'Chinese':
-        print(f'已设置默认语言：Simple Chinese简体中文')
+    print('请选择您的默认语言\nPlease choose your default language')
+    print('C-Chinese Simplfied（简体中文）')
+    lang = input('>').lower()
+    if lang == 'C' or lang == 'chinese':
+        print(f'已设置默认语言：Chinese Simplfied简体中文')
         ctd()
         break
     else:
@@ -119,12 +121,12 @@ while True:
     print('请查看此协议条款并进行下一步安装')
     print('This system made by Annie Cathy.Copyright 2023 (R).This Program is free for use!')
     print('Y 同意并继续  N 拒绝并退出')
-    aoachk = input('[Y/N]...')
-    if aoachk == 'y' or aoachk == 'Y':
+    aoachk = input('[Y/N]...').lower()
+    if aoachk == 'y':
         print('您已同意此协议条款')
         ctd()
         break
-    elif aoachk == 'n' or aoachk == 'N':
+    elif aoachk == 'n':
         print('您拒绝了此协议条款')
         print('即将退出')
         ctd()
@@ -138,7 +140,12 @@ cls()
 
 print('--------账户设置--------')
 username = input('请为您的电脑账户设置一个名称>')
-password = input('请为您的电脑账户设置一个密码（最好是6位数）>')
+while True :
+    password = input('请为您的电脑账户设置一个密码（最好是6位数）>')
+    if bool(password) == 0 or ' ' in password:
+        print("{Font.RED}密码非法，请重试")
+    else :
+        break
 print('账户设置成功！')
 print('请确认账户信息：')
 print(f'用户名：{username}')
@@ -158,7 +165,7 @@ while True:
         updatatf = 'DownloadOnly'
         break
     elif updatatf_1 == '3':
-        updatatf= 'DoNotUpdata'
+        updatatf= 'DoNotUpdate'
         break
     else:
         cls()
@@ -175,24 +182,24 @@ while True:
     print('Canary:此更新不由Annie Cathy验证，且相较于前两个更新通道，此更新通道极不稳定。此更新通道更新频率为每周一次。适合高度技术性用户使用。')
     updata_channel = input('>')
     if updata_channel == 'A' or updata_channel == 'a':
-        updatachs = 'BetaChannel'
-        print('你选择了BetaChannel')
+        updatachs = 'Beta_Channel'
+        print('你选择了Beta_Channel')
         with open('important/Version.ver','a',encoding='utf-8') as f:
-            f.write("DevChannel")
+            f.write("Dev_Channel")
             f.close()
         break
     elif  updata_channel == 'B' or updata_channel == 'b':
-        updatachs = 'DevChannel'
+        updatachs = 'Dev_Channel'
         print('你选择了DevChannel')
         with open('important/Version.ver','a',encoding='utf-8') as f:
-            f.write("DevChannel")
+            f.write("Dev_Channel")
             f.close()
         break
     elif updata_channel == 'C' or updata_channel == 'c':
-        updatachs = 'CanaryChannel'
+        updatachs = 'Canary_Channel'
         print('你选择了CanaryChannel')
         with open('important/Version.ver','a',encoding='utf-8') as f:
-            f.write("CanaryChannel")
+            f.write("Canary_Channel")
             f.close()
         break
 

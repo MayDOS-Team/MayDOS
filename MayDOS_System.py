@@ -38,19 +38,14 @@ Font.SELECTED  : 反显
 黑色：无（黑色哪看得见？）
 """
 try:
-    import random
-    import wget
-    import json
-    import requests
-    import os,sys
-    import time
+    import wget, json, requests
+    import os, sys, asyncio, tkinter.messagebox
     import base64
-    import tkinter.messagebox
-    import asyncio
     from time import sleep
 except Exception as e:
-    print(e)
-    input('按下回车键退出...')
+    print(f"{e}\n")
+    os.system(r'install.bat')
+    os.system(r'cls')
     quit()
     
 os.system(r'title MayDOS') # 更改标题
@@ -60,20 +55,15 @@ if os.name == "nt":
     os.system("")
     
 # 自动生成/补全 部分文件
-if os.path.isdir('MayDOS_Login/') == False:
-    os.makedirs('MayDOS_Login/')
-if os.path.isdir('important/') == False:
-    os.makedirs('important/')
-if os.path.isdir('important/Applications') == False:
-    os.makedirs('important/Applications')
-if os.path.isdir('important/log') == False:
-    os.makedirs('important/log')
-if os.path.isdir('important/download') == False:
-    os.makedirs('important/download')
-if os.path.isfile('important/download/per.txt') == False:
-    with open('important/download/per.txt','w') as f:
-        f.write('root')
-        f.close()
+DIR_LIST = ['MayDOS_Login/', 'important/', 'important/Applications', 'important/log', 'important/download', 'important/download/per.txt']
+for dir in DIR_LIST:
+    if dir != DIR_LIST[-1]: 
+        if os.path.isdir(dir) == False:
+            os.makedirs(dir)
+    else:
+        if os.path.isdir(dir) == False:
+            with open('important/download/per.txt','w') as f:
+                f.write('root')
 
 # 彩色自定义文本
 class Style:
@@ -127,7 +117,7 @@ class SysPerAPI():
                     f.close()
                 return 200
             elif self.Per != 'sys':
-                print(f'{Font.YELLOW}Insufficient permissions{Font.WHITE}')
+                print(f'{Font.YELLOW}权限不足{Font.WHITE}')
                 return 201
             else:
                 print(f'{Font.YELLOW}Unknown permissions: {self.Per}{Font.WHITE}')
@@ -185,6 +175,7 @@ async def check_update():
 # 变量设置
 error_version_file_not_found = False
 error_account_file_not_found = False
+PYTHON_PROGRAM = "python3.11.exe"
 
 try:
     ver_open= open('important/Version.ver', mode='r')
@@ -196,8 +187,8 @@ except FileNotFoundError:
 # 以asyncio调用check_update_bar函数
 asyncio.run(check_update_bar())
 
-# 打印动画(不要将其存储进文本文件,会读取错误)
-with open("icon.txt", "r") as icon:
+# 打印动画
+with open("important/icon.txt", "r") as icon:
     for text in icon.readlines():
         print(text)
 
@@ -218,9 +209,9 @@ try:
         password = str(base64.b64decode(password),'utf-8')
     except Exception as e:
         print(f'{Font.RED}ERROR: 账户信息加载失败，账户文件可能损坏，请尝试注销并重新注册{Font.WHITE}')
-        print(f'{Font.RED}ERROR_INFOMATION{Font.WHITE}')
+        print(f'{Font.RED}错误信息：{Font.WHITE}')
         print(e)
-        sleep(10)
+        input('按下回车键退出. . .')
         quit()
     
 except FileNotFoundError:
@@ -228,24 +219,24 @@ except FileNotFoundError:
 
 if error_account_file_not_found == True and error_version_file_not_found == False:
     print(f'{Font.RED}未注册或账户文件异常丢失,可尝试启动OOBE修复{Font.WHITE}')
-    input('按下回车键退出...')
+    input('按下回车键退出. . .')
     quit()
 elif error_version_file_not_found == True and error_account_file_not_found == False:
     print(f'{Font.RED}系统版本文件被移动或异常丢失，请尝试联系我们以修复,可尝试启动OOBE修复{Font.WHITE}')
-    input('按下回车键退出...')
+    input('按下回车键退出. . .')
     quit()
 elif error_account_file_not_found  and error_version_file_not_found == True:
     print(f'{Font.RED}未找到系统版本文件及账户文件,可尝试启动OOBE修复{Font.WHITE}')
     print(f'{Font.RED}请确认是否注册并尝试联系我们,可尝试启动OOBE修复{Font.WHITE}')
-    input('按下回车键退出...')
+    input('按下回车键退出. . .')
     quit()
     
-print(f'{Font.GREEN}Welcome!')
+print(f'{Font.GREEN}欢迎{Font.WHITE}')
 
 while True:
     if username == 'TEST':
         print(account_info)
-        print(f'{Font.BLUE}test_account_auto_login{Font.WHITE}')
+        print(f'{Font.BLUE}测试账户登录{Font.WHITE}')
     else:
         print(f'{Font.BEIGE}登录{username}的电脑{Font.WHITE}')
     
@@ -255,24 +246,23 @@ while True:
         userspassword = input('密码>')
 
     if userspassword == password:
-        print(f'{Font.GREEN}密码正确')
+        print(f'{Font.GREEN}密码正确{Font.WHITE}')
         break
     else:
-        print(f'{Font.RED}密码错误！')
+        print(f'{Font.RED}密码错误！{Font.WHITE}')
         pass
 
-time.sleep(0.25)
+sleep(0.25)
 SysPerAPI().cls()
 
 print(f'{Font.GREEN}正在准备你的MayDOS命令行......{Font.WHITE}')
 print(f'{Font.GREEN}请输入"usebook"以打开MayDOS{CODE}的使用手册和帮助{Font.WHITE}')
-time.sleep(0.02)
 
 while True:
     cmd = input('MayDOS/Root>>>')
 
-    if cmd.lower() == 'calc' :
-        os.system('python important/Applications/calc.py')
+    if cmd.lower() == 'calc':
+        os.system(f"{PYTHON_PROGRAM} important/Applications/calc.py")
 
     elif cmd[0:3].lower() == 'sof':
         try:
@@ -284,14 +274,13 @@ while True:
                 if os.path.isfile(f'important/Applications/{cmd[4:-1]}/{cmd[4:-1]}.json') == False or os.path.isfile(f'important/Applications/{cmd[4:-1]}/{cmd[4:-1]}/MAIN.txt') == False:
                     print(f'{Font.YELLOW}MayDos/Root/SOF>>>应用程序"{cmd[4:-1]}"可能已被恶意篡改,请谨慎运行。（Y/N)')
                     Warn_0 = input()
-                    if Warn_0 == 'Y' or Warn_0 == 'y' or Warn_0 == 'YES' or Warn_0 == 'yes':
+                    Warn_0 = Warn_0.lower()
+                    if Warn_0 == 'y' or Warn_0 == 'yes':
                         try:
                             os.system(f'START /MAX "important/Applications/{cmd[4:-1]}/{cmd[4:-1]}.bat"')
                         except Exception as e:
                             print(f'{Font.RED}MayDOS/Root>>>{e}')
-                        except FileNotFoundError as e:
-                            print(f'{Font.RED}MayDOS/Root>>>{e}')
-                    elif Warn_0 == 'N' or Warn_0 == 'n' or Warn_0 == 'NOT' or Warn_0 == 'not':
+                    elif Warn_0 == 'n' or Warn_0 == 'not':
                         pass
                     else:
                         print("未知操作，已自动退出...")
@@ -309,7 +298,8 @@ while True:
             print("======================================================")
             while True:
                 D_I_0 = input("MayDOS/Download/STORE>>>")
-                if D_I_0 == 'EXIT' or D_I_0 == 'exit' or D_I_0 == 'Exit':
+                D_I_0 = D_I_0.lower()
+                if D_I_0 == 'exit':
                     break
 
         elif DOWN_INPUT == '2': 
@@ -347,20 +337,9 @@ while True:
             print(" ")
 
     elif cmd.lower() == 'usebook' or cmd.lower() == 'help':
-        print(f'{Font.GREEN}SEARCH           互联网搜索')
-        print(f'{Font.GREEN}USEBOOK          获取帮助')
-        print(f'{Font.GREEN}HELP             获取帮助')
-        print(f'{Font.GREEN}MENU             查询程序来源')
-        print(f'{Font.GREEN}CALC             打开计算器')
-        print(f'{Font.GREEN}CLOSE            退出MayDOS')
-        print(f'{Font.GREEN}NOTEPAD          打开记事本程序')
-        print(f'{Font.GREEN}EXPLORER         打开资源管理器')
-        print(f'{Font.GREEN}CLS              清屏')
-        print(f'{Font.GREEN}SYSVER           查看系统版本')
-        print(f'{Font.GREEN}DOWN             下载应用程序')
-        print(f'{Font.GREEN}SOF <Name>       打开任何应用程序')
-        print(f'{Font.BLUE}=====================================')
-        print(f'{Font.YELLOW}SHUT             关机(不是闹着玩的！){Font.WHITE}')
+        with open("important/usebook.txt", "r", encoding="utf-8") as menu:
+            for text in menu.readlines():
+                print(f"{Font.GREEN}{text}{Font.WHITE}")
 
     elif cmd.lower() == 'close':
         quit()
@@ -369,14 +348,17 @@ while True:
         pass
 
     elif cmd.lower() == 'shut':
-        if sys.platform == 'win32':
-            os.system('shutdown -p')
-        elif sys.platform == 'linux':
-            os.system('shutdown –h now')
-        elif sys.platform == 'darwin':
-            os.system('sudo shutdown -h now')
+        if input("{Font.RED}确认关机（这可不是闹着玩的）？{Font.WHITE}[Y/N]") == "Y":
+            if sys.platform == 'win32':
+                os.system('shutdown -p')
+            elif sys.platform == 'linux':
+                os.system('shutdown –h now')
+            elif sys.platform == 'darwin':
+                os.system('sudo shutdown -h now')
+            else:
+                os.system('shutdown -p')
         else:
-            os.system('shutdown -p')
+            break
 
     elif cmd.lower() == 'notepad':
         try:
