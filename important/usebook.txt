@@ -1,0 +1,14 @@
+SEARCH           互联网搜索
+USEBOOK          获取帮助
+HELP             获取帮助
+MENU             查询程序来源
+CALC             打开计算器
+CLOSE            退出MayDOS
+NOTEPAD          打开记事本程序
+EXPLORER         打开资源管理器
+CLS              清屏
+SYSVER           查看系统版本
+DOWN             下载应用程序
+SOF <Name>       打开任何应用程序
+=====================================
+SHUT             关机(不是闹着玩的！)
