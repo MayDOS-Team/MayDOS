@@ -1,52 +1,22 @@
-import os
-import time
-import base64
-import json
-import tkinter as tk
-from time import sleep
+try:
+    import os, json, tkinter as tk, base64
+    import MayDOS_Functions as func
+    from time import sleep
+except Exception as e:
+    print(f"{e}\n")
+    os.system(r'install.bat')
+    os.system(r'cls')
+    quit()
 
 if os.name == "nt":
     os.system("")
 
 # 彩色自定义文本
-class Style:
-    END = '\33[0m'
-    BOLD = '\33[1m'
-    ITALIC = '\33[3m'
-    URL = '\33[4m'
-    BLINK = '\33[5m'
-    BLINK2 = '\33[6m'
-    SELECTED = '\33[7m'
+Font = func.Font
+background = func.Background
+SysPerAPI = func.SysPerAPI
 
-class Font:
-    BLACK = '\33[30m'
-    RED = '\33[31m'
-    GREEN = '\33[32m'
-    YELLOW = '\33[33m'
-    BLUE = '\33[34m'
-    VIOLET = '\33[35m'
-    BEIGE = '\33[36m'
-    WHITE = '\33[37m'
-
-class Background:
-    BLACK = '\33[40m'
-    RED = '\33[41m'
-    GREEN = '\33[42m'
-    YELLOW = '\33[43m'
-    BLUE = '\33[44m'
-    VIOLET = '\33[45m'
-    BEIGE = '\33[46m'
-    WHITE = '\33[47m'
-
-try:
-    readversion = open('important/Version.ver',mode='r')
-    readversion.seek(0, 0)
-    version = readversion.read()
-    readversion.close()
-except FileNotFoundError:
-    print(f'{Font.RED}ERROR：无法找到文件Version.ver{Font.WHITE}')
-    input('按任意键退出. . .')
-    quit()
+CODE = func.check_ver()
 
 if os.path.isdir('MayDOS_Login/') == False:
     os.makedirs('MayDOS_Login/')
@@ -60,7 +30,7 @@ if os.path.isdir('important/download') == False:
     os.makedirs('important/download')
 if os.path.isfile('important/Version.ver') == False:
     with open('important/Version.ver','w',encoding='gbk') as f:
-        f.write(f"{version}\n")
+        f.write(f"{CODE}\n")
         f.close()
 if os.path.isfile('important/download/cg.txt') == False:
     path_url = os.getcwd() + "\\"
@@ -68,7 +38,7 @@ if os.path.isfile('important/download/cg.txt') == False:
         f.write(path_url)
         f.close()
 if os.path.isfile('important/Applications/sys.json') == False:
-    SYS_0 = {"Name":version,"description":"a cui dos"}
+    SYS_0 = {"Name":CODE,"description":"MayDOS"}
     with open('important/Applications/sys.json','w') as f:
         SYS_1 = json.dumps(SYS_0,sort_keys=True, indent=4, separators=(',', ':'))
         f.write(SYS_1)
@@ -87,9 +57,6 @@ if account_existed == 'account.user':
     os.system("START start.bat")
     quit()
 
-def cls():
-    os.system('cls')
-
 def ctd():
     for i in range(3):
         list = ['3','2','1','0']
@@ -97,24 +64,24 @@ def ctd():
         print('\r下一步...{}'.format(list[index]),end='',flush=True)
         sleep(1)
 
-print(f'MayDOS {version} OOBE 启动中. . .')
-sleep(2)
+print(f'MayDOS {CODE} OOBE 启动中. . .')
+sleep(1)
 input('按任意键启动系统')
-cls()
+SysPerAPI().cls()
 
 while True:     #Default Language Set
     print('请选择您的默认语言\nPlease choose your default language')
     print('C-Chinese Simplfied（简体中文）')
     lang = input('>').lower()
-    if lang == 'C' or lang == 'chinese':
+    if lang == 'c' or lang == 'chinese':
         print(f'已设置默认语言：Chinese Simplfied简体中文')
         ctd()
         break
     else:
-        cls()
+        SysPerAPI().cls()
         pass
 
-cls()
+SysPerAPI().cls()
 
 while True:
     print('欢迎使用MayDOS！')
@@ -132,11 +99,11 @@ while True:
         ctd()
         quit()
     else:
-        cls()
+        SysPerAPI().cls()
         print('请输入正确的选择！')
         pass
 
-cls()
+SysPerAPI().cls()
 
 print('--------账户设置--------')
 username = input('请为您的电脑账户设置一个名称>')
@@ -146,20 +113,21 @@ while True :
         print("{Font.RED}密码非法，请重试")
     else :
         break
+
 print('账户设置成功！')
 print('请确认账户信息：')
 print(f'用户名：{username}')
 print(f'密码：{password}')
 input('按下回车键开始下一步操作...')
-cls()
+SysPerAPI().cls()
 
-print(f'当前版本：{version}')
+print(f'当前版本：{CODE}')
 print('请选择是否更新')
 while True:
     print('1,自动更新 2,下载更新安装包后让我选择是否安装更新 3,让我选择是否下载并安装更新')
     updatatf_1 = input('>')
     if updatatf_1 == '1':
-        updatatf = 'AutoUpdata'
+        updatatf = 'AutoUpdate'
         break
     elif updatatf_1 == '2':
         updatatf = 'DownloadOnly'
@@ -168,11 +136,11 @@ while True:
         updatatf= 'DoNotUpdate'
         break
     else:
-        cls()
+        SysPerAPI().cls()
         print('请输入正确的选项！')
         pass
 
-cls()
+SysPerAPI().cls()
 
 while True:
     print('请选择更新通道')
@@ -206,7 +174,7 @@ while True:
 print('更新通道设置完成')
 
 ctd()
-cls()
+SysPerAPI().cls()
 
 print('稍作休息，我们马上就为您准备完成')
 
@@ -232,20 +200,20 @@ print('设置完成！')
 print('感谢使用MayDOS！')
 
 ctd()
-cls()
+SysPerAPI().cls()
 
 while True:
     print('请选择接下来的操作')
     print(f'1,启动MayDOS 2,退出安装程序')
     lastchs = input('>')
     if lastchs == '1':
-        cls()
+        SysPerAPI().cls()
         os.system("START start.bat")
         quit()
     elif lastchs ==  '2':
         quit()
     else:
-        cls()
+        SysPerAPI().cls()
         print('请输入正确的选项！')
         pass
 
