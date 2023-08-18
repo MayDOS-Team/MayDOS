@@ -2,10 +2,13 @@ try:
     import wget, json, requests
     import os, sys, asyncio, tkinter.messagebox
     import base64
+    #尝试导入以上库
 except Exception as e:
     print(f"{e}\n")
+    #如果出错则输出错误信息，并执行“install.bat”进行库的下载安装
     os.system(r'install.bat')
     os.system(r'cls')
+    #清屏，退出
     quit()
 
 # 彩色自定义文本
@@ -47,9 +50,11 @@ class SysPerAPI():
     def cls(self) -> int:
         try:
             os.system('cls')
+            #尝试执行cls指令，如果是Windows系统则会返回代码200
             return 200
         except Exception as e:
             print(f'{Font.RED}MayDOS/ROOT/ERROR>>>{e}{Font.WHITE}')
+            #如果出错则返回错误代码400
             return 400
 
     def CreatSysFile(self,path : str = '',context : str = 'Test') -> int:
@@ -58,27 +63,31 @@ class SysPerAPI():
                 with open(path,'w',encoding='utf-8') as f:
                     f.write(f'SYS_FILE\n{context}')
                     f.close()
-                return 200
+                    #如果以上操作完成，则返回200
+                    return 200
             elif self.Per != 'sys':
                 print(f'{Font.YELLOW}权限不足{Font.WHITE}')
+                #如果权限不足，则返回代码201
                 return 201
             else:
                 print(f'{Font.YELLOW}Unknown permissions: {self.Per}{Font.WHITE}')
+                #其他问题返回代码202
                 return 202
         except Exception as e:
             print(f'{Font.RED}MayDOS/Root/ERROR>>>{e}{Font.WHITE}')
+            #如果以上操作出错，则返回错误代码400
             return 400
 
     def JsonFileRead(self,path):
         try:
-            with open(path,'r') as f:
+            with open(path,'r') as f:   #尝试读取path路径的文件，如果顺利完成，则返回文件内容
                 __date = f.read()
                 f.close()
                 return __date
-        except Exception as e:
+    except Exception as e:  #如果出错，则显示错误信息
             print(f'{Font.RED}MayDOS/Root/ERROR>>>{e}')
         
-def create_dir():
+def create_dir():   #创建系统文件夹函数
     DIR_LIST = ['MayDOS_Login/', 'important/', 'important/Applications', 'important/log', 'important/download', 'important/download/per.txt']
     for dir in DIR_LIST:
         if dir != DIR_LIST[-1]: 
@@ -95,7 +104,7 @@ async def check_update_bar(CODE):
     for i in range(1, 101):
         print("\r", end="")
         print("检测更新中: {}%: ".format(i), "▋" * (i // 2), end="")
-        sys.stdout.flush()
+        sys.stdout.flush()    #刷新输出区，否则以上进度条不会立马显示
     await task    
     
 async def check_update(CODE):
@@ -126,58 +135,72 @@ async def check_update(CODE):
     else:
         os.system("cls")
 
-def check_ver():
+def check_ver():    #检查系统版本文件函数
     try:
         ver_open= open('important/Version.ver', mode='r')
+        #尝试打开系统版本文件
         ver_open.seek(0, 0)
         CODE = ver_open.read()
+        #返回版本号
         return CODE
-    except FileNotFoundError:
-        print(f'{Font.RED}系统版本文件被移动或异常丢失，请尝试联系我们以修复,可尝试启动OOBE修复{Font.WHITE}')
+    except FileNotFoundError as e:
+        print(f'{Font.RED}错误信息：{e}\n系统版本文件被移动或异常丢失，请尝试联系我们以修复,可尝试启动OOBE修复{Font.WHITE}')
+        #错误则输出错误信息和提示
         input('按下回车键退出. . .')
         quit()
     
-def check_user_login():
+def check_user_login():    #检查用户登录函数
     try:
         account_open = open('important/account.user',mode='r')
+        #尝试打开用户文件并读取到accout_info变量中
         account_info = account_open.readlines()
 
         un_username = account_info[0]
         username = un_username[0:-1]
+        #读取用户名
 
         un_password = account_info[1]
         password = un_password[0:-1]
+        #读取用户密码
 
         account_open.close()
+        #养成关闭文件的良好习惯:)
         
         try:
             username = str(base64.b64decode(username),'utf-8')
             password = str(base64.b64decode(password),'utf-8')
+            #尝试对用户名和密码进行base64解码
         except Exception as e:
             print(f'{Font.RED}ERROR: 账户信息加载失败，账户文件可能损坏，请尝试注销并重新注册{Font.WHITE}')
-            print(f'{Font.RED}错误信息：{Font.WHITE}')
-            print(e)
+            print(f'{Font.RED}错误信息：{e}{Font.WHITE}')
             input('按下回车键退出. . .')
             quit()
-        
+        #不出错则会返回用户信息，用户名和用户密码
         return account_info, username, password
     
     except FileNotFoundError:
         print(f'{Font.RED}未注册或账户文件异常丢失,可尝试启动OOBE修复{Font.WHITE}')
+        #如果文件找不到则判定为账户未注册或账户文件异常丢失
         input('按下回车键退出. . .')
         quit()
 
 def user_login(account_info, username, password):
     while True:
-        match username:
-            case "TEST":
-                print(account_info)
-                print(f'{Font.BLUE}测试账户登录{Font.WHITE}')
-                break
-            case _:
-                print(f'{Font.BEIGE}登录{username}的电脑{Font.WHITE}')
-                userspassword = input('密码>')
-
+        try :
+            match username:    #match -- case为Python3.10及以上语法，如果此处报错则为Python版本过低
+                case "TEST":    #测试账户则直接通过
+                    print(account_info)
+                    print(f'{Font.BLUE}测试账户登录{Font.WHITE}')
+                    break
+                case _:
+                    print(f'{Font.BEIGE}登录{username}的电脑{Font.WHITE}')
+                    userspassword = input('密码>')
+        except Exception as e :
+            #提示用户更新Python
+            print("{Font.RED}错误信息：{e}\nPython版本过低，请使用3.10以上版本{Font.WHITE}")
+            input("按任意键退出. . .")
+            quit()
+        #判断密码是否正确
         if userspassword == password:
             print(f'{Font.GREEN}密码正确{Font.WHITE}')
             break
@@ -206,31 +229,39 @@ def notepad():
                 print(f'模式:正常写入\n')
                 CFILE = input("MayDOS/Apply/NOTEPAD/CreatFile>>>")
                 with open(CFILE, ENCO_FILE, encoding='utf-8') as f:
+                    #向文件写入用户输入的内容
                     f.write(CFILE)
                     f.close()
             #SysPerAPI().cls()
             #os.system('python important/Applications/Notepad/Notepad.py')
+            #墓前上面两个语句出问题了，所以注释掉
 
     except Exception as e:
         print(f'{Font.RED}MayDOS/Root/ERROR>>>{e}{Font.WHITE}')
+        #如果出错则输出错误信息（大部分可能是match -- case的问题，恼）
 
 def sof(cmd):
     try:
         if cmd.endswith('json'):
+            #我也不知道为什么是json就无权，恼
             print(f"{Font.RED}MayDOS/Root>>>该文件您无权访问")
         elif cmd.endswith('api') or cmd.endswith('api.py'):
+            #这个我也不知道（恼
             print(f"{Font.RED}MayDOS/Root>>>该文件您无权访问")
         else:
             if os.path.isfile(f'important/Applications/{cmd[4:-1]}/{cmd[4:-1]}.json') == False or os.path.isfile(f'important/Applications/{cmd[4:-1]}/{cmd[4:-1]}/MAIN.txt') == False:
+                #如果文件不是在以上两个文件夹里面的，就判定为被《恶意纂改》
                 match input(f'{Font.YELLOW}MayDos/Root/SOF>>>应用程序"{cmd[4:-1]}"可能已被恶意篡改,请谨慎运行。（Y/N){Font.WHITE}').lower():
                     case "y" | "yes":
                         try:
                             os.system(f'START /MAX "important/Applications/{cmd[4:-1]}/{cmd[4:-1]}.bat"')
                         except Exception as e:
+                            #为什么这个语句会出错呢，我也不知道
                             print(f'{Font.RED}MayDOS/Root>>>{e}')
                     case 'n' | 'not':
                         pass
                     case _:
+                        #其实可以吧n或者not归到这里的，将下面文本改成pass就好了，但我就是不改，略略略，我就是玩儿
                         print("未知操作，已自动退出...")
 
     except Exception as e:
@@ -242,6 +273,7 @@ def download():
     print("=======================================")
     match input("MayDOS/download>>>"):
         case '1':
+            #没啥用的1
             print("======================================================")
             print("已选择下载源<STORE>,可下载已上传的应用,输入EXIT以退出|")
             print("======================================================")
@@ -250,16 +282,19 @@ def download():
                     break
 
         case '2': 
+            下载文件
             print("=========================================================")
             print("已选择下载源<HTTP>,可下载任何网络上的应用,输入EXIT以退出|")
             print("=========================================================")
             while True:
                 D_I_0 = input("MayDOS/Download/STORE>>>")
+                #判断输入的内容，非exit就下载文件到download文件夹
                 if D_I_0.lower() == 'exit':
                     break
                 else:
                     wget.download(f'{D_I_0}',"important/download/")
 
-        case _: 
+        case _:
+            #我也不道啊
             print("未知操作,已自动退出......")
             print("===================================================")
