@@ -1,5 +1,5 @@
 try:
-    import wget, json, requests
+    import wget, json, requests, random
     import os, sys, asyncio, tkinter.messagebox
     import base64
     #尝试导入以上库
@@ -109,11 +109,11 @@ async def check_update_bar(CODE):
     
 async def check_update(CODE):
     # 读取更新日志
-    Update = json.loads(requests.get("https://buelie.github.io/MayDOS/config.json").text)
+    Update = json.loads(requests.get("https://MayDOS-Team.github.io/update/config.json").text)
 
     # 比较版本号
     if Update["latest"]["default"] != CODE:
-        Y_N_U = tkinter.messagebox.askyesno(title='更新提示',message=f'有可用更新，是否下载?\n当前版本: {CODE} -> {Update["latest"]["default"]}\n稍等一下，马上就好，在important/download/找到更新程序并运行即可')
+        Y_N_U = tkinter.messagebox.askyesno(title='更新提示',message=f'有可用更新，是否下载?\n当前版本: {CODE} 最新版本：{Update["latest"]["default"]}\n稍等一下，马上就好，在important/download/找到更新程序并运行即可')
         
         if Y_N_U == True:   # 如果条件为真则执行该线程
 
@@ -298,3 +298,27 @@ def download():
             #我也不道啊
             print("未知操作,已自动退出......")
             print("===================================================")
+
+class Progressbar:
+    def __init__(self, message, mode):
+        self.mode = mode
+        self.message = message
+    def start(self):
+        if self.mode == 0 :
+            for i in range(1, 101):
+                print('\r', end="")
+                print(str(self.message), f"{i}%", "▌" * (i // 2), end='')
+                sys.stdout.flush()
+                sleep(0.02)
+        if self.mode == 1 :
+            for i in range(1, 101):
+                print('\r', end="")
+                print(str(self.message), f"{i}%", "▌" * (i // 2), end='')
+                sys.stdout.flush()
+                sleep(0.075)
+        if self.mode == 2 :
+            for i in range(1, 101):
+                print('\r', end="")
+                print(str(self.message), f"{i}%", "▋" * (i // 2), end='')
+                sys.stdout.flush()
+                sleep(0.09)
