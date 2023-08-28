@@ -1,6 +1,6 @@
 try:
     import os, json, tkinter as tk, base64
-    import MayDOS_Functions as func
+    import important.Applications.MayDOS_Functions as func
     from time import sleep
     #导库，导不了就执行install.bat，然后退出
 except Exception as e:

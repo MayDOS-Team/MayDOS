@@ -39,7 +39,7 @@ Font.SELECTED  : 反显
 """
 try:
     import os, sys, asyncio, random
-    import MayDOS_Functions as func
+    import important.Applications.MayDOS_Functions as func
     from time import sleep
     #依旧是导库，导不了就安装，Functions的问题仍然没解决（吧）
 except Exception as e:
@@ -63,7 +63,8 @@ func.create_dir()
 Font = func.Font
 background = func.Background
 SysPerAPI = func.SysPerAPI
-PYTHON_PROGRAM = "python3.11.exe"
+with open("important/python_path.txt") as txt:
+    PYTHON_PATH = txt.readline()
 #这个变量真的没问题吗？
 
 CODE = func.check_ver()
@@ -98,7 +99,7 @@ while True:
     #下面就是判断用户要干嘛了
     match cmd.lower():
         case "calc":
-            os.system(f"{PYTHON_PROGRAM} important/Applications/calc.py")            
+            os.system(f"{PYTHON_PATH} important/Applications/calc.py")            
 
         case _ if cmd.lower().startswith("sof"):
             func.sof(cmd)
@@ -146,7 +147,7 @@ while True:
         case 'explorer':
             try:
                 SysPerAPI().cls()
-                os.system(f'{PYTHON_PROGRAM} important/Applications/Explorer/Explorer.py')
+                os.system(f'{PYTHON_PATH} important/Applications/Explorer/Explorer.py')
             except:
                 print(f'{Font.RED}找不到{cmd}应用程序{Font.WHITE}')
 
