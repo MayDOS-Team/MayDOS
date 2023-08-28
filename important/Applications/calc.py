@@ -1,17 +1,23 @@
+import MayDOS_Functions as func
+
+Font = func.Font
+background = func.Background
+SysPerAPI = func.SysPerAPI
+
 def calculate(expression):
     try:
         result = eval(expression)
         return result
     except Exception as e:
-        return f"Error: {e}"
+        print(f"{Font.YELLOW}请输入正确的表达式\nError: {e} {Font.WHITE}")
 
 def save_to_file(result):
     with open("important/log/calc.log", "a") as file:
         file.write(str(result) + "\n")
 
 def main():
-    print("欢迎使用由Annie_Cathy制作的计算器。")
-    print("输入'exit'以退出.")
+    print("欢迎使用由MayDOS-Team制作的计算器。")
+    print("输入\"exit\"以退出.")
     print("请输入你的表达式:")
 
     while True:
