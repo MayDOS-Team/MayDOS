@@ -2,6 +2,7 @@ try:
     import wget, json, requests, random
     import os, sys, asyncio, tkinter.messagebox
     import base64
+    from time import sleep
     #尝试导入以上库
 except Exception as e:
     print(f"{e}\n")
@@ -84,8 +85,8 @@ class SysPerAPI():
                 __date = f.read()
                 f.close()
                 return __date
-    except Exception as e:  #如果出错，则显示错误信息
-            print(f'{Font.RED}MayDOS/Root/ERROR>>>{e}')
+        except Exception as e:  #如果出错，则显示错误信息
+                print(f'{Font.RED}MayDOS/Root/ERROR>>>{e}')
         
 def create_dir():   #创建系统文件夹函数
     DIR_LIST = ['MayDOS_Login/', 'important/', 'important/Applications', 'important/log', 'important/download', 'important/download/per.txt']
@@ -101,10 +102,7 @@ def create_dir():   #创建系统文件夹函数
 # 创建更新检测函数
 async def check_update_bar(CODE):
     task = asyncio.create_task(check_update(CODE))
-    for i in range(1, 101):
-        print("\r", end="")
-        print("检测更新中: {}%: ".format(i), "▋" * (i // 2), end="")
-        sys.stdout.flush()    #刷新输出区，否则以上进度条不会立马显示
+    Progressbar("检测更新中: ", mode=1, sleep_time=0).start()
     await task    
     
 async def check_update(CODE):
@@ -137,7 +135,7 @@ async def check_update(CODE):
 
 def check_ver():    #检查系统版本文件函数
     try:
-        ver_open= open('important/Version.ver', mode='r')
+        ver_open = open('important/Version.ver', mode='r')
         #尝试打开系统版本文件
         ver_open.seek(0, 0)
         CODE = ver_open.read()
@@ -282,7 +280,7 @@ def download():
                     break
 
         case '2': 
-            下载文件
+            #下载文件
             print("=========================================================")
             print("已选择下载源<HTTP>,可下载任何网络上的应用,输入EXIT以退出|")
             print("=========================================================")
@@ -300,25 +298,21 @@ def download():
             print("===================================================")
 
 class Progressbar:
-    def __init__(self, message, mode):
+    def __init__(self, message, mode, sleep_time):
         self.mode = mode
         self.message = message
+        self.sleep_time = sleep_time
+
     def start(self):
         if self.mode == 0 :
             for i in range(1, 101):
                 print('\r', end="")
                 print(str(self.message), f"{i}%", "▌" * (i // 2), end='')
                 sys.stdout.flush()
-                sleep(0.02)
+                sleep(self.sleep_time) #刷新输出区，否则以上进度条不会立马显示
         if self.mode == 1 :
-            for i in range(1, 101):
-                print('\r', end="")
-                print(str(self.message), f"{i}%", "▌" * (i // 2), end='')
-                sys.stdout.flush()
-                sleep(0.075)
-        if self.mode == 2 :
             for i in range(1, 101):
                 print('\r', end="")
                 print(str(self.message), f"{i}%", "▋" * (i // 2), end='')
                 sys.stdout.flush()
-                sleep(0.09)
+                sleep(self.sleep_time) #刷新输出区，否则以上进度条不会立马显示
