@@ -12,7 +12,7 @@ def calculate(expression):
         print(f"{Font.YELLOW}请输入正确的表达式\nError: {e} {Font.WHITE}")
 
 def save_to_file(result):
-    with open("important/log/calc.log", "a") as file:
+    with open("../log/calc.log", "a") as file:
         file.write(str(result) + "\n")
 
 def main():
