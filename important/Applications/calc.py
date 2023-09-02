@@ -4,14 +4,14 @@ Font = func.Font
 background = func.Background
 SysPerAPI = func.SysPerAPI
 
-def calculate(expression):
+def calculate(expression: str):
     try:
-        result = eval(expression)
+        result: str = eval(expression)
         return result
     except Exception as e:
         print(f"{Font.YELLOW}请输入正确的表达式\nError: {e} {Font.WHITE}")
 
-def save_to_file(result):
+def save_to_file(result: str):
     with open("../log/calc.log", "a") as file:
         file.write(str(result) + "\n")
 
