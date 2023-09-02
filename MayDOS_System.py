@@ -53,7 +53,7 @@ os.system(r'title MayDOS') # 更改标题
 # 环境设置
 if os.name == "nt":
     #依旧想改成pass，所以这次我改了
-##    os.system("")
+    #os.system("")
     pass
     
 # 自动生成/补全 部分文件
@@ -64,7 +64,7 @@ Font = func.Font
 background = func.Background
 SysPerAPI = func.SysPerAPI
 with open("important/python_path.txt") as txt:
-    PYTHON_PATH = txt.readline()
+    PYTHON_PATH: str = txt.readline()
 #这个变量真的没问题吗？
 
 CODE = func.check_ver()
@@ -87,7 +87,6 @@ print(f'{Font.GREEN}欢迎{Font.WHITE}')
 #同上
 func.user_login(account_info, username, password)
 
-sleep(0.25)
 #让用户觉得系统做了很多东西
 SysPerAPI().cls()
 
@@ -95,7 +94,7 @@ print(f'{Font.GREEN}正在准备你的MayDOS命令行......{Font.WHITE}')
 print(f'{Font.GREEN}请输入"usebook"以打开MayDOS{CODE}的使用手册和帮助{Font.WHITE}')
 
 while True:
-    cmd = input('MayDOS/Root>>>')
+    cmd: str = input('MayDOS/Root>>>')
     #下面就是判断用户要干嘛了
     match cmd.lower():
         case "calc":
@@ -129,7 +128,8 @@ while True:
 
         case 'shut':
             #这个可是真的关机
-            if input(f"{Font.RED}确认关机（这可不是闹着玩的）？{Font.WHITE}[Y/N]") == "Y":
+            ans: str = input(f"{Font.RED}确认关机（这可不是闹着玩的）？{Font.WHITE}[Y/N]")
+            if ans.lower() == "y":
                 if sys.platform == 'win32':
                     os.system('shutdown -p')
                 elif sys.platform == 'linux':
@@ -165,11 +165,6 @@ while True:
             'MayDOS的软件API其实和TinOS一样','MayDOS的软件可以无缝移植到TinOS哦!~',
             '其实OOBE中的更新通道仔细一看就感觉不对劲','你知道MayDOS其实在0.4以后有了阁小小的GUI吗？']
             print(f"{Font.YELLOW}未定义的指令，请输入'usebook'以查看使用手册和帮助{Font.WHITE}")
-            print("Tips: ", List_RAN[random.randint(0, len(List_RAN)-1)])
-
-
-
-
-
+            print("Tips: ", random.choices(List_RAN))
 
 #没了，注释写完了
