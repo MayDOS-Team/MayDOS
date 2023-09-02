@@ -64,10 +64,8 @@ if 'account.user' in check_files:    #检查账户是否已注册
 
 def ctd():
     #搞等待的函数，形式主义而已
-    for i in range(3):
-        list = ['3','2','1','0']
-        index = i % 4
-        print('\r下一步...{}'.format(list[index]),end='',flush=True)
+    for i in range(3, -1, -1):
+        print(f'\r下一步...{i}',end='',flush=True)
         sleep(1)
 
 print(f'MayDOS {CODE} OOBE 启动中. . .')
@@ -204,8 +202,8 @@ account.write(f'{b64updatachs}')
 account.close()
 #养成良好习惯，关闭文件，理解成保存也可以
 
-sleep(5)
-#形式上的等5秒
+sleep(3)
+#形式上的等3秒
 
 print('设置完成！')
 print('感谢使用MayDOS！')
@@ -221,7 +219,7 @@ while True:
         SysPerAPI().cls()
         os.system("START start.bat")
         quit()
-    elif lastchs ==  '2':
+    elif lastchs == '2':
         quit()
     else:
         SysPerAPI().cls()
