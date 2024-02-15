@@ -12,7 +12,8 @@ except Exception as e:
 
 if os.name == "nt":
     #写pass不香么？鬼知道为什么写这个
-    os.system("")
+    #os.system("")
+    pass
 
 # 彩色自定义文本
 Font = func.Font    #从MayDOS_Functions.py文件导的
@@ -22,26 +23,26 @@ SysPerAPI = func.SysPerAPI
 CODE = func.check_ver()    #读取版本号
 
 #以下为检查文件(夹)的完整性
-if os.path.isdir('MayDOS_Login/') == False:
+if not os.path.isdir('MayDOS_Login/'):
     os.makedirs('MayDOS_Login/')
-if os.path.isdir('important/') == False:
+if not os.path.isdir('important/'):
     os.makedirs('important/')
-if os.path.isdir('important/Applications') == False:
+if not os.path.isdir('important/Applications'):
     os.makedirs('important/Applications')
-if os.path.isdir('important/log') == False:
+if not os.path.isdir('important/log'):
     os.makedirs('important/log')
-if os.path.isdir('important/download') == False:
+if not os.path.isdir('important/download'):
     os.makedirs('important/download')
-if os.path.isfile('important/Version.ver') == False:
+if not os.path.isfile('important/Version.ver'):
     with open('important/Version.ver','w',encoding='gbk') as f:
         f.write(f"{CODE}\n")
         f.close()
-if os.path.isfile('important/download/cg.txt') == False:
+if os.path.isfile('important/download/cg.txt'):
     path_url = os.getcwd() + "\\"
     with open('important/download/cg.txt','w') as f:
         f.write(path_url)
         f.close()
-if os.path.isfile('important/Applications/sys.json') == False:
+if not os.path.isfile('important/Applications/sys.json'):
     SYS_0 = {"Name":CODE,"description":"MayDOS"}
     with open('important/Applications/sys.json','w') as f:
         SYS_1 = json.dumps(SYS_0,sort_keys=True, indent=4, separators=(',', ':'))
@@ -49,9 +50,6 @@ if os.path.isfile('important/Applications/sys.json') == False:
         f.close()
 #文件完整性检查到此结束
 
-tk = tk.Tk()
-#搞个窗口出来
-tk.withdraw()
 
 check_files = os.listdir('important/')
 #account_existed = check_files[0]
@@ -225,5 +223,3 @@ while True:
         SysPerAPI().cls()
         print('请输入正确的选项！')
         pass
-
-tk.mainloop()
