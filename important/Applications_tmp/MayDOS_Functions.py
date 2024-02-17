@@ -321,6 +321,3 @@ def ls(cmd):
 
 def reload():
     os.system("start MayDOS_System.py")
-
-    
-    
