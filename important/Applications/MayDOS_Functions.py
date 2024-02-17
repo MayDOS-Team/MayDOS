@@ -88,7 +88,7 @@ class SysPerAPI():
 
 def create_dir():  # 创建系统文件夹函数
     DIR_LIST = ['MayDOS_Login/', 'important/', 'important/Applications', 'important/log', 'important/download',
-                'important/download/per.txt']
+                'important/download/per.txt', '.exe/software.txt']
     for dir in DIR_LIST:
         if dir != DIR_LIST[-1]:
             if not os.path.isdir(dir):
