@@ -54,7 +54,7 @@ if os.name == "nt":
     pass
 
 # 自动生成/补全 部分文件
-func.create_dir()
+# func.create_dir()
 
 # 变量设置
 Font = func.Font
@@ -140,7 +140,10 @@ while True:
                 func.sof(tmpcmd)
 
         case _ if cmd.lower().startswith('down'):
-            func.download()
+            if cmd.lower().endswith("?"):
+                print("用法：down")
+            else:
+                func.download()
 
         case _ if cmd.lower().startswith('search'):
             search_cmd = r'START https://cn.bing.com/search?q=' + cmd[7:]
@@ -174,6 +177,8 @@ while True:
                 for i in func.ls('important/applications'):
                     print(i)
                 print(f"共{len(func.ls('important/applications'))}个文件。")
+            elif tmpcmd == "?":
+                print("用法：ls [路径名]")
             else:
                 if os.path.abspath(tmpcmd).startswith(r"C:\Windows") and username != "Root":
                     print(
@@ -227,7 +232,7 @@ while True:
             elif cmd[6:] == "off":
                 echo_off = True
 
-        case "reload":
+        case "reboot":
             func.reload()
             exit()
 
