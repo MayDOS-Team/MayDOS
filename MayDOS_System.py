@@ -140,10 +140,7 @@ while True:
                 func.sof(tmpcmd)
 
         case _ if cmd.lower().startswith('down'):
-            if cmd.lower().endswith("?"):
-                print("用法：down")
-            else:
-                func.download()
+            func.download()
 
         case _ if cmd.lower().startswith('search'):
             search_cmd = r'START https://cn.bing.com/search?q=' + cmd[7:]
@@ -177,8 +174,6 @@ while True:
                 for i in func.ls('important/applications'):
                     print(i)
                 print(f"共{len(func.ls('important/applications'))}个文件。")
-            elif tmpcmd == "?":
-                print("用法：ls [路径名]")
             else:
                 if os.path.abspath(tmpcmd).startswith(r"C:\Windows") and username != "Root":
                     print(
@@ -233,6 +228,7 @@ while True:
                 echo_off = True
 
         case "reboot":
+            func.methods.turn(10, "正在关机...")
             func.reload()
             exit()
 
@@ -247,7 +243,7 @@ while True:
                         'MayDOS现在已经有很多人参与开发了呢', 'MayDOS的开发人员似乎对MayDOS没有激情',
                         'MayDOS的软件API其实和TinOS一样', 'MayDOS的软件可以无缝移植到TinOS哦!~',
                         '其实OOBE中的更新通道仔细一看就感觉不对劲', '你知道MayDOS其实在0.4以后有了阁小小的GUI吗？']
-            print(f"{Font.YELLOW}未定义的指令，请输入'usebook'以查看使用手册和帮助{Font.WHITE}")
+            print(f"{Font.RED}未定义的指令{Font.YELLOW} {cmd} {Font.RED}，请输入'usebook'以查看使用手册和帮助{Font.WHITE}")
             print("Tips: ", random.choice(List_RAN))
 
 # 没了，注释写完了
