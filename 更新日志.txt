@@ -1,3 +1,13 @@
+* 0.9.0(此版本由Jacky Mei开发且未经MayDOS团队验证):
+  * 修改了一些代码，删除了"MayDOS_Login"文件夹,".exe"文件夹及其引用
+  * 修改了查找不到命令时的提示
+  * 修改了命令"reload"为"reboot"
+  * 移除了him
+
+* 0.8.1(此版本由Jacky Mei开发且未经MayDOS团队验证):
+  * 加入了命令帮助，可以用"命令 ?"获取命令帮助
+  * 移除了him
+
 * 0.8.0(此版本由Jacky Mei开发且未经MayDOS团队验证):
   * 加入命令"ls"，可以列出一个文件夹内所有文件（包括文件夹）
   * 修改命令"sof"，现用法"sof -abspath|-rltpath 文件名"

@@ -54,7 +54,7 @@ if os.name == "nt":
     pass
 
 # 自动生成/补全 部分文件
-func.create_dir()
+# func.create_dir()
 
 # 变量设置
 Font = func.Font
@@ -227,7 +227,8 @@ while True:
             elif cmd[6:] == "off":
                 echo_off = True
 
-        case "reload":
+        case "reboot":
+            func.methods.turn(10, "正在关机...")
             func.reload()
             exit()
 
@@ -242,7 +243,7 @@ while True:
                         'MayDOS现在已经有很多人参与开发了呢', 'MayDOS的开发人员似乎对MayDOS没有激情',
                         'MayDOS的软件API其实和TinOS一样', 'MayDOS的软件可以无缝移植到TinOS哦!~',
                         '其实OOBE中的更新通道仔细一看就感觉不对劲', '你知道MayDOS其实在0.4以后有了阁小小的GUI吗？']
-            print(f"{Font.YELLOW}未定义的指令，请输入'usebook'以查看使用手册和帮助{Font.WHITE}")
+            print(f"{Font.RED}未定义的指令{Font.YELLOW} {cmd} {Font.RED}，请输入'usebook'以查看使用手册和帮助{Font.WHITE}")
             print("Tips: ", random.choice(List_RAN))
 
 # 没了，注释写完了

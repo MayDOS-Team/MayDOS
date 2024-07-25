@@ -88,11 +88,13 @@ class SysPerAPI():
 
 def create_dir():  # 创建系统文件夹函数
     DIR_LIST = ['MayDOS_Login/', 'important/', 'important/Applications', 'important/log', 'important/download',
-                'important/download/per.txt', '.exe/software.txt']
+                'important/download/per.txt']
     for dir in DIR_LIST:
         if dir != DIR_LIST[-1]:
-            if not os.path.isdir(dir):
+            if not os.path.isdir(dir) and not dir.endswith(".txt"):
                 os.makedirs(dir)
+            elif os.path.exists(dir):
+                open(dir, "w").close()
         else:
             if not os.path.isdir(dir):
                 with open('important/download/per.txt', 'w') as f:
@@ -165,7 +167,7 @@ def user_login(account_info, username, password):
                     userspassword = input('密码>')
         except Exception as e:
             # 提示用户更新Python
-            print("{Font.RED}错误信息：{e}\nPython版本过低，请使用3.10以上版本{Font.WHITE}")
+            print(f"{Font.RED}错误信息：{e}\nPython版本过低，请使用3.10以上版本{Font.WHITE}")
             input("按任意键退出. . .")
             quit()
         # 判断密码是否正确
@@ -221,7 +223,8 @@ def sof(cmd):
         else:
             if not os.stat(f'{os.path.abspath(f"important/Applications_tmp/{cmd}")}').st_size == \
                    os.stat(f'{os.path.abspath(f"important/Applications/{cmd}")}').st_size:
-                match input(f'安全提醒：{Font.YELLOW}应用程序"{cmd}"可能已被恶意篡改,请谨慎运行。（Y/N){Font.WHITE}').lower():
+                match input(
+                    f'安全提醒：{Font.YELLOW}应用程序"{cmd}"可能已被恶意篡改,请谨慎运行。（Y/N){Font.WHITE}').lower():
                     case "y" | "yes":
                         try:
                             os.system(f'START /MAX {os.path.abspath(f"important/Applications/{cmd}")}')
@@ -301,7 +304,7 @@ class Progressbar:
 
 
 def menu(cmd):
-    a = open(".exe/software.txt", "r", encoding="utf-8").read().split("\n")
+    a = ["calc", "calc.py"]
     if cmd.lower() in a:
         return "系统软件"
     else:
@@ -322,5 +325,17 @@ def ls(cmd):
 def reload():
     os.system("start MayDOS_System.py")
 
-    
-    
+class methods:
+    @staticmethod
+    def turn(times: int, string: str, delay_time=0.1):
+        for j in range(1):
+            for i in range(times):
+                print(f"{string}\\\r", end="", flush=True)
+                time.sleep(delay_time)
+                print(f"{string}|\r", end="", flush=True)
+                time.sleep(delay_time)
+                print(f"{string}/\r", end="", flush=True)
+                time.sleep(delay_time)
+                print(f"{string}-\r", end="", flush=True)
+                time.sleep(delay_time)
+
