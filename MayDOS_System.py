@@ -39,14 +39,13 @@ Font.SELECTED  : 反显
 """
 import os
 import random
-import asyncio
+#import asyncio
 import sys
-from time import sleep
-import colorama
+#from time import sleep
 import important.Applications.MayDOS_Functions as func
 
 os.system(r'title MayDOS')  # 更改标题
-
+ 
 # 环境设置
 if os.name == "nt":
     # 依旧想改成pass，所以这次我改了
