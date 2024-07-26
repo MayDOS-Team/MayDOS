@@ -1,9 +1,6 @@
 import os
 import sys
 
-import os
-import sys
-
 class Message:
     __text:str = 'NULL'
     __mode:str = 'info'
