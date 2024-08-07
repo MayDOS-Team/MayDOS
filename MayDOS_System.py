@@ -67,9 +67,9 @@ class Main:
             try:
                 # 如果用户名存在，尝试打开对应的用户文件以读取密码
                 with open(f"./Users/{tmpUserName}.txt") as f:
-                    UserPassword = f.read()
+                    hashed_user_password = f.read().strip()
                 # 验证输入的密码是否与文件中的密码匹配
-                if getpass.getpass("输入密码:") == UserPassword:
+                if syslib.verify_password(hashed_user_password, getpass.getpass("请输入密码：")):
                     # 密码匹配，登录成功
                     print(f"{syslib.Font.GREEN}登录成功!{syslib.Font.WHITE}")
                     Username = tmpUserName
@@ -154,7 +154,7 @@ class Main:
                     # 检查访问模式是否为"Normal"，如果是，则尝试提升为"Root"权限
                     if AccessManager.GetAccessType() == "Normal":
                         # 获取用户密码输入，并与存储的密码进行比较
-                        if getpass.getpass(f"[sudo] {Username}的密码：") == UserPassword:
+                        if syslib.verify_password(hashed_user_password, getpass.getpass(f"[sudo] {Username}的密码：")):
                             # 密码正确，提升权限并设置路径
                             AccessManager.SetAccessType("Root")
                             path = r"home\MayDOS"
@@ -236,6 +236,11 @@ class Main:
                     os.system("cls")
                     self.main()
 
+                case "user":
+                    print("User命令帮助:\n"
+                          "user show all            列出当前所有用户以及当前登录用户\n"
+                          "user change password     更换当前账户的密码")
+
                 # 根据命令行参数执行相应的用户操作
                 case _ if syslib.SplitCommandArguments(cmd.lower(), "one")["Command Name"] == "user":
                     # 获取命令的所有参数，用于后续的具体操作
@@ -252,13 +257,14 @@ class Main:
                         # 更改密码的逻辑
                         if arguments[1] == "password":
                             print(f"更改{Username}的密码:")
-                            if getpass.getpass("输入旧密码") == UserPassword:
+                            if syslib.verify_password(hashed_user_password, getpass.getpass("输入旧密码")):
                                 # 输入并确认新密码
                                 PasswordToChange = getpass.getpass("输入新密码")
                                 UserPassword = PasswordToChange
-                                # 将新密码写入文件
+                                # 将新密码加密并写入文件
+                                hashed_user_password = syslib.hash_password(UserPassword)
                                 f = open(os.path.abspath(f"Users\\{Username}.txt"), "w")
-                                f.write(UserPassword)
+                                f.write(hashed_user_password)
                                 f.close()
                                 print("更改成功!")
                             else:
@@ -307,8 +313,8 @@ class Main:
                                 TmpUserPassword = f.read()
                             # 循环提示用户输入密码，直到正确
                             while True:
-                                passw = getpass.getpass("输入密码:")
-                                if passw == TmpUserPassword:
+                                pwd = getpass.getpass("输入密码:")
+                                if syslib.verify_password(TmpUserPassword, pwd):
                                     # 密码匹配，更新当前用户名和密码
                                     Username = tmpUserName
                                     UserPassword = TmpUserPassword
@@ -407,6 +413,8 @@ class Main:
 
                     else:
                         continue
+                case 'fuck':
+                    sys.exit(0)
 
                 case _ if cmd.lower().isspace() or cmd.lower() == "":
                     pass
