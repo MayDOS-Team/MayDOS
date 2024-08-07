@@ -1,0 +1,23 @@
+USEBOOK             获取帮助
+CALC                打开计算器
+NOTEPAD             打开记事本程序
+EXIT                退出MayDOS
+MINESWEEPER         打开扫雷程序
+CLS                 清屏
+SYSVER              查看系统版本
+ADD                 添加拓展应用程序
+DEL                 删除拓展应用程序
+LIST                查看拓展应用程序
+SU                  切换用户名
+REBOOT              重启系统
+CAT                 查看文件内容
+REGISTER            注册用户
+SUDO SU             切换为root用户
+SHUT                关机（可不是闹着玩的）
+
+==================================
+USER :
+    SHOW ALL        显示用户
+    CHANGE :        更改
+        PASSWORD    密码
+        USERNAME    用户名

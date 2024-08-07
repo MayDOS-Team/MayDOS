@@ -1,0 +1,21 @@
+MMMMMMMM               MMMMMMMM                                             DDDDDDDDDDDDD             OOOOOOOOO        SSSSSSSSSSSSSSS 
+M:::::::M             M:::::::M                                             D::::::::::::DDD        OO:::::::::OO    SS:::::::::::::::S
+M::::::::M           M::::::::M                                             D:::::::::::::::DD    OO:::::::::::::OO S:::::SSSSSS::::::S
+M:::::::::M         M:::::::::M                                             DDD:::::DDDDD:::::D  O:::::::OOO:::::::OS:::::S     SSSSSSS
+M::::::::::M       M::::::::::M  aaaaaaaaaaaaayyyyyyy           yyyyyyy       D:::::D    D:::::D O::::::O   O::::::OS:::::S            
+M:::::::::::M     M:::::::::::M  a::::::::::::ay:::::y         y:::::y        D:::::D     D:::::DO:::::O     O:::::OS:::::S            
+M:::::::M::::M   M::::M:::::::M  aaaaaaaaa:::::ay:::::y       y:::::y         D:::::D     D:::::DO:::::O     O:::::O S::::SSSS         
+M::::::M M::::M M::::M M::::::M           a::::a y:::::y     y:::::y          D:::::D     D:::::DO:::::O     O:::::O  SS::::::SSSSS    
+M::::::M  M::::M::::M  M::::::M    aaaaaaa:::::a  y:::::y   y:::::y           D:::::D     D:::::DO:::::O     O:::::O    SSS::::::::SS  
+M::::::M   M:::::::M   M::::::M  aa::::::::::::a   y:::::y y:::::y            D:::::D     D:::::DO:::::O     O:::::O       SSSSSS::::S 
+M::::::M    M:::::M    M::::::M a::::aaaa::::::a    y:::::y:::::y             D:::::D     D:::::DO:::::O     O:::::O            S:::::S
+M::::::M     MMMMM     M::::::Ma::::a    a:::::a     y:::::::::y              D:::::D    D:::::D O::::::O   O::::::O            S:::::S
+M::::::M               M::::::Ma::::a    a:::::a      y:::::::y             DDD:::::DDDDD:::::D  O:::::::OOO:::::::OSSSSSSS     S:::::S
+M::::::M               M::::::Ma:::::aaaa::::::a       y:::::y              D:::::::::::::::DD    OO:::::::::::::OO S::::::SSSSSS:::::S
+M::::::M               M::::::M a::::::::::aa:::a     y:::::y               D::::::::::::DDD        OO:::::::::OO   S:::::::::::::::SS 
+MMMMMMMM               MMMMMMMM  aaaaaaaaaa  aaaa    y:::::y                DDDDDDDDDDDDD             OOOOOOOOO      SSSSSSSSSSSSSSS   
+                                                    y:::::y                                                                            
+                                                   y:::::y                                                                             
+                                                  y:::::y                                                                              
+                                                 y:::::y                                                                               
+                                                yyyyyyy                                                                                
