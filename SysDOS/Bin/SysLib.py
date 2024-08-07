@@ -1,5 +1,6 @@
 import os
 import time
+import hashlib
 
 
 # 定义一个异常类，用于操作系统开发过程中遇到的错误
@@ -77,6 +78,38 @@ def ListUsers():
     return UserNameList
 
 
+def hash_password(password: str):
+    """
+    对密码进行哈希处理。
+
+    本函数使用sha256对密码进行哈希处理，并将处理后的密码返回。
+
+    参数:
+    password (str): 要进行哈希处理的密码。
+
+    返回:
+    str: 哈希处理后的密码。
+    """
+    # 使用sha256对密码进行哈希处理，并将处理后的密码返回
+    hashed_pwd = hashlib.sha256(password.encode()).hexdigest()
+    return hashed_pwd
+
+
+def verify_password(hashed_pwd: str, in_pwd: str):
+    """
+    验证密码是否正确
+
+    参数:
+    hashed_pwd (str): 从文件中读取的加密后密码。
+    in_pwd (str): 用户输入的密码。
+
+    返回:
+    bool: 密码是否正确。
+    """
+    hashed_in_pwd = hash_password(in_pwd)
+    return hashed_pwd == hashed_in_pwd
+
+
 def UserRegister():
     """
     用户注册函数。
@@ -101,8 +134,9 @@ def UserRegister():
                 # 上面这sb代码输两次重复密码是吧？
             else:
                 # 当密码一致时，将密码写入以用户名命名的文件中，并跳出内层循环
+                hashed_userpass = hash_password(userpass)
                 f = open(os.path.abspath(f"Users\\{username}.txt"), "w")
-                f.write(userpass)
+                f.write(hashed_userpass)
                 f.close()
                 break
         break  # 跳出外层循环，结束注册过程
