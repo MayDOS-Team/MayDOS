@@ -38,6 +38,14 @@ class Main:
             os.system("pip3 install chardet")
             import chardet
 
+        # 检查并导入第三方库psutil
+        if syslib.CheckThirdPartyLib("psutil"):
+            import psutil
+        else:
+            # 如果chardet未安装，则尝试通过pip安装
+            os.system("pip3 install psutil")
+            import psutil
+
         os.system(r'title MayDOS')  # 更改标题
         os.system("cls")
 
@@ -46,7 +54,8 @@ class Main:
         # 打印动画
         with open(current_path + "\\SysDOS\\Bin\\icon.txt", "r") as icon:
             for text in icon.readlines():
-                print(text)
+                print(text, end='')
+        print()
 
         time.sleep(0.25)
         # 创建系统访问管理器实例，用于后续设置访问类型和用户管理操作
@@ -88,8 +97,9 @@ class Main:
             # 用户名不存在，提示无效用户并退出程序
             print("无效用户")
             quit()
-
+       
         os.system("cls")
+        Username = "Fang-Omega"
 
         # 准备MayDOS命令行环境
         print(f'正在准备你的MayDOS命令行......')
@@ -98,37 +108,54 @@ class Main:
 
         # 初始化命令行回显状态
         echo_off = False
-        # 初始化命令行提示符
-        lx = "$"
         # 初始化当前路径
-        path = "~"
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+        alls = ["", ""] if not os.path.exists("SysDOS\\Bin\\using_theme.txt") else open("SysDOS\\Bin\\using_theme.txt").read().split("\n")
+        Root_input_tmp = alls[1]
+        Normal_input_tmp = alls[0]
+        fuck = False
 
         while True:  # 进入命令行循环
+            path = os.getcwd()
+            path = path.replace(os.path.dirname(os.path.abspath(__file__)), "~", 1)
             # 根据当前的访问类型（Root或其他用户）以及是否关闭回显来获取用户输入的命令
-            if AccessManager.GetAccessType() == "Root":
-                # 如果echo_off未启用，则显示特定的提示信息，其中包括路径和用户输入的上一个命令
-                if not echo_off:
-                    cmd = input(
-                        f'{syslib.Font.BEIGE}({syslib.Font.RED}root@MayDOS{syslib.Font.BEIGE})-[{syslib.Font.WHITE}{syslib.Style.BOLD}{path}'
-                        f'{syslib.Style.END}'
-                        f'{syslib.Font.BEIGE}]'
-                        f'{syslib.Font.RED}{lx}{syslib.Font.WHITE}')
+            Root_input = syslib.Color_Replace(r"%BEIGE(%REDroot@MayDOS%BEIGE)-[%WHITE%BOLD{path}%END%BEIGE]%RED#%WHITE").format(path=path) if Root_input_tmp == "" else syslib.Color_Replace(Root_input_tmp).format(path=path)
+            Normal_input = syslib.Color_Replace(r'%GREEN(%BEIGE{Username}@MayDOS%GREEN)-[%WHITE{path}%GREEN]%BEIGE$%WHITE').format(Username=Username, path=path) if Normal_input_tmp == "" else syslib.Color_Replace(Normal_input_tmp).format(Username=Username, path=path)
+            if fuck == False:
+                if AccessManager.GetAccessType() == "Root":
+                    # 如果echo_off未启用，则显示特定的提示信息，其中包括路径和用户输入的上一个命令
+                    if not echo_off:
+                        cmd = input(Root_input)
+                    else:
+                        # 如果echo_off启用，则不显示任何提示信息，直接获取用户输入
+                        cmd = input()
                 else:
-                    # 如果echo_off启用，则不显示任何提示信息，直接获取用户输入
-                    cmd = input()
+                    # 对于非Root用户，处理方式类似，但提示信息中的用户名和权限级别会有所不同
+                    if not echo_off:
+                        cmd = input(Normal_input)
+                    else:
+                        # 如果echo_off启用，则不显示任何提示信息，直接获取用户输入
+                        cmd = input()
             else:
-                # 对于非Root用户，处理方式类似，但提示信息中的用户名和权限级别会有所不同
-                if not echo_off:
-                    cmd = input(
-                        f'{syslib.Font.GREEN}({syslib.Font.BEIGE}{Username}@MayDOS{syslib.Font.GREEN})-[{syslib.Font.WHITE}{path}{syslib.Font.GREEN}]'
-                        f'{syslib.Font.BEIGE}{lx}{syslib.Font.WHITE}')
-                else:
-                    # 如果echo_off启用，则不显示任何提示信息，直接获取用户输入
-                    cmd = input()
+                fuck = False
+            # 以空格分隔命令与参数
+            if "\"" in cmd:
+                tmpcmd = cmd.split("\"")
+                for i in range(len(tmpcmd)):
+                    tmpcmd[i] = tmpcmd[i].strip()
+                tmpcmd = [i for i in tmpcmd if i != '']
+            else:
+                tmpcmd = cmd.split(" ")
+            args = []
+            if len(tmpcmd) - 1:
+                args = tmpcmd[1:]
+            else:
+                args = []
+            cmd = tmpcmd[0]
 
             match cmd.lower():  # 匹配用户输入的命令
-                case _ if cmd.lower().startswith("cat "):  # 如果命令以"cat "开头，则执行文件读取操作
-                    path_1 = cmd[4:]  # 获取文件路径
+                case "cat":  # 如果命令为 cat，则执行文件读取操作
+                    path_1 = args[0]  # 获取文件路径
                     try:
                         # 使用chardet检测文件编码
                         encoding = chardet.detect(open(os.path.abspath(path_1), "rb").read())["encoding"]
@@ -158,7 +185,6 @@ class Main:
                             # 密码正确，提升权限并设置路径
                             AccessManager.SetAccessType("Root")
                             path = r"home\MayDOS"
-                            lx = "#"
                         else:
                             # 密码错误，显示错误信息
                             print(f"[{syslib.Font.RED}Error{syslib.Font.WHITE}] 密码不正确!")
@@ -166,13 +192,96 @@ class Main:
                         # 当前访问模式不是"Normal"，提示用户输入正确的命令以查看使用手册
                         print(
                             f"{syslib.Font.RED}未定义的指令{syslib.Font.YELLOW} sudo su {syslib.Font.RED}，请输入'usebook'以查看使用手册和帮助{syslib.Font.WHITE}")
+
                 # 根据用户选择，展示usebook文本内容
                 case 'usebook':
                     # 打开usebook.txt文件，准备读取内容
                     with open(current_path + "\\SysDOS\\Bin\\usebook.txt", "r", encoding="utf-8") as menu:
                         # 逐行读取文件内容并打印
                         for text in menu.readlines():
-                            print(text)
+                            print(text, end='')
+                    print()
+
+                case 'rm':
+                    # 删除文件
+                    try:
+                        filename = args[0]
+                        while True:
+                            sure = input(syslib.Color_Replace(r"%RED确认删除？%WHITE(y/n)"))
+                            if sure == "y":
+                                if os.path.isfile(filename):
+                                    os.remove(filename)
+                                    break
+                                elif os.path.isdir(filename):
+                                    os.rmdir(filename)
+                                    break
+                            elif sure == "n":
+                                break
+                            else:
+                                print("请输入 y 或 n！")
+                    except FileNotFoundError:
+                        print("没有找到该文件/文件夹！")
+                    else:
+                        print(syslib.Color_Replace("%GREEN成功执行！%WHITE"))
+
+                case 'top':
+                    processes = list(psutil.process_iter())
+
+                    # 打印表头
+                    header = (
+                        f'________Name________{syslib.Font.BLUE}|{syslib.Style.END}_PID_{syslib.Font.BLUE}|'
+                        f'{syslib.Style.END}__RAM__{syslib.Font.BLUE}|{syslib.Style.END}'
+                        f'________Name________{syslib.Font.BLUE}|{syslib.Style.END}_PID_{syslib.Font.BLUE}|'
+                        f'{syslib.Style.END}__RAM__{syslib.Font.BLUE}|{syslib.Style.END}'
+                    )
+                    print(header)
+
+                    for i in range(0, len(processes), 2):
+                        # 处理当前进程
+                        if i < len(processes):
+                            process = processes[i]
+                            try:
+                                name = process.name()
+                                pid = process.pid
+                                mem_usage = round(process.memory_percent(), 2)
+                            except psutil.NoSuchProcess:
+                                continue  # 如果进程不存在，则跳过
+
+                            name_str = name if len(name) <= 20 else name[:17] + "..."
+                            print(f'{name_str:<20}{syslib.Font.BLUE}|{syslib.Style.END}'
+                                  f'{pid:<5}{syslib.Font.BLUE}|{syslib.Style.END}'
+                                  f'{mem_usage:<6}%{syslib.Font.BLUE}|{syslib.Style.END}', end='')
+
+                        # 处理下一个进程
+                        if i + 1 < len(processes):
+                            process = processes[i + 1]
+                            try:
+                                name = process.name()
+                                pid = process.pid
+                                mem_usage = round(process.memory_percent(), 2)
+                            except psutil.NoSuchProcess:
+                                continue  # 如果进程不存在，则跳过
+
+                            name_str = name if len(name) <= 20 else name[:17] + "..."
+                            print(f'{name_str:<20}{syslib.Font.BLUE}|{syslib.Style.END}'
+                                  f'{pid:<5}{syslib.Font.BLUE}|{syslib.Style.END}'
+                                  f'{mem_usage:<5} %{syslib.Font.BLUE}|{syslib.Style.END}')
+                        else:
+                            print()
+
+                case "uitheme":
+                    if args[0] == "set":
+                        with open(fr"Developers\{args[1]}", "r") as f:
+                            a = f.read().split("\n")
+                            Normal_input_tmp = syslib.Color_Replace(a[0]).format(Username=Username, path=path)
+                            Root_input_tmp = syslib.Color_Replace(a[1]).format(Username=Username, path=path)
+                        with open("SysDOS\\Bin\\using_theme.txt", "w") as f:
+                            f.write(syslib.DeColor_Replace(Normal_input_tmp) + "\n" + syslib.DeColor_Replace(Root_input_tmp))
+                    elif args[0] == "reset":
+                        Normal_input_tmp = ""
+                        Root_input_tmp = ""
+                        with open("SysDOS\\Bin\\using_theme.txt", "w") as f:
+                            f.write(syslib.DeColor_Replace('%GREEN(%BEIGE{Username}@MayDOS%GREEN)-[%WHITE{path}%GREEN]%BEIGE$%WHITE') + "\n" + syslib.DeColor_Replace("%BEIGE(%REDroot@MayDOS%BEIGE)-[%WHITE%BOLD{path}%END%BEIGE]%RED#%WHITE"))
 
                 case "calc":
                     # 打开并以二进制模式读取 Python 文件的内容
@@ -182,6 +291,16 @@ class Main:
 
                     # 执行 Python 代码
                     exec(calc)
+
+                case "cp":
+                    try:
+                        shutil.copy2(args[0], args[1])
+                    except FileNotFoundError:
+                        print(syslib.Font.RED + "没有找到该文件/文件夹！" + syslib.Style.END)
+                    except Exception:
+                        print(syslib.Font.RED + "无法识别您的输入！" + syslib.Style.END)
+                    else:
+                        print(syslib.Font.GREEN + "成功执行！" + syslib.Style.END)
 
                 case 'notepad':
                     # 询问用户选择命令行还是图形界面来显示记事本
@@ -195,7 +314,6 @@ class Main:
                         # 执行读取的Python代码
                         exec(notepad)
 
-
                     elif dis == '2':
                         # 打开并以二进制模式读取 Python 文件的内容
                         with open(current_path + "\\SysDOS\\AppFile\\Notepad_gui.py", "rb") as file:
@@ -204,7 +322,6 @@ class Main:
 
                         # 执行 Python 代码
                         exec(notepad_gui)
-
 
                     else:
                         print("输入错误，请重新输入")
@@ -225,7 +342,6 @@ class Main:
                     if AccessManager.GetAccessType() == "Root":
                         # 如果是Root，则降级访问类型为Normal，并重置相关变量
                         AccessManager.SetAccessType("Normal")
-                        lx = "$"
                         path = "~"
                     else:
                         # 如果不是Root，则直接退出程序
@@ -236,61 +352,65 @@ class Main:
                     os.system("cls")
                     self.main()
 
-                case "user":
-                    print("User命令帮助:\n"
-                          "user show all            列出当前所有用户以及当前登录用户\n"
-                          "user change password     更换当前账户的密码")
+                case "cd":
+                    topath = args[0]
+                    try:
+                        os.chdir(topath)
+                    except FileNotFoundError:
+                        print("没有找到该位置！")
 
                 # 根据命令行参数执行相应的用户操作
-                case _ if syslib.SplitCommandArguments(cmd.lower(), "one")["Command Name"] == "user":
-                    # 获取命令的所有参数，用于后续的具体操作
-                    arguments = syslib.SplitCommandArguments(cmd.lower(), "all")["Command Arguments"]
-                    # 处理显示所有用户的情况
-                    if arguments[0] == "show":
-                        if arguments[1] == "all":
-                            print('当前系统下可用用户:')
-                            for i in syslib.ListUsers():
-                                # 根据用户名是否为当前用户，输出不同的提示信息
-                                print(i if i != Username else i + "<-当前用户")
-                    # 处理更改用户信息的情况
-                    elif arguments[0] == "change":
-                        # 更改密码的逻辑
-                        if arguments[1] == "password":
-                            print(f"更改{Username}的密码:")
-                            if syslib.verify_password(hashed_user_password, getpass.getpass("输入旧密码")):
-                                # 输入并确认新密码
-                                PasswordToChange = getpass.getpass("输入新密码")
-                                UserPassword = PasswordToChange
-                                # 将新密码加密并写入文件
-                                hashed_user_password = syslib.hash_password(UserPassword)
-                                f = open(os.path.abspath(f"Users\\{Username}.txt"), "w")
-                                f.write(hashed_user_password)
-                                f.close()
-                                print("更改成功!")
-                            else:
-                                print("更改失败!")
-                        # 更改用户名的逻辑
-                        elif arguments[1] == "username":
-                            print(f"更改{Username}的用户名:")
-                            UsernameNew = input("输入新用户名:")
-                            # 确保新用户名非空且不存在于系统用户列表中
-                            if (UsernameNew != "" or UsernameNew.isspace()) and UsernameNew not in syslib.ListUsers():
-                                # 更新用户名，先复制文件再删除原文件
-                                open(f"Users/{UsernameNew}.txt", "w").write(open(f"Users/{Username}.txt").read())
-                                os.remove(os.path.abspath(f"Users/{Username}.txt"))
-                                print(f"{syslib.Font.GREEN}更改成功!{syslib.Font.WHITE}")
-                                Username = UsernameNew
-                            elif UsernameNew == "" or UsernameNew.isspace():
-                                print(f"{syslib.Font.RED}在试图更改用户名时报错:{syslib.Font.YELLOW}用户名为空!{syslib.Font.WHITE}")
-                            elif UsernameNew in syslib.ListUsers():
-                                print(f"{syslib.Font.RED}在试图更改用户名时报错:{syslib.Font.YELLOW}用户名已存在!{syslib.Font.WHITE}")
-
-
-                    # 如果操作命令不是前两者，则显示帮助信息
-                    else:
+                case "user":
+                    if not args:
                         print("User命令帮助:\n"
                               "user show all            列出当前所有用户以及当前登录用户\n"
                               "user change password     更换当前账户的密码")
+                    else:
+                        # 处理显示所有用户的情况
+                        if args[0] == "show":
+                            if args[1] == "all":
+                                print('当前系统下可用用户:')
+                                for i in syslib.ListUsers():
+                                    # 根据用户名是否为当前用户，输出不同的提示信息
+                                    print(i if i != Username else i + "<-当前用户")
+                        # 处理更改用户信息的情况
+                        elif args[0] == "change":
+                            # 更改密码的逻辑
+                            if args[1] == "password":
+                                print(f"更改{Username}的密码:")
+                                if syslib.verify_password(hashed_user_password, getpass.getpass("输入旧密码")):
+                                    # 输入并确认新密码
+                                    PasswordToChange = getpass.getpass("输入新密码")
+                                    UserPassword = PasswordToChange
+                                    # 将新密码加密并写入文件
+                                    hashed_user_password = syslib.hash_password(UserPassword)
+                                    f = open(os.path.abspath(f"Users\\{Username}.txt"), "w")
+                                    f.write(hashed_user_password)
+                                    f.close()
+                                    print("更改成功!")
+                                else:
+                                    print("更改失败!")
+                            # 更改用户名的逻辑
+                            elif args[1] == "username":
+                                print(f"更改{Username}的用户名:")
+                                UsernameNew = input("输入新用户名:")
+                                # 确保新用户名非空且不存在于系统用户列表中
+                                if (UsernameNew != "" or UsernameNew.isspace()) and UsernameNew not in syslib.ListUsers():
+                                    # 更新用户名，先复制文件再删除原文件
+                                    open(f"Users/{UsernameNew}.txt", "w").write(open(f"Users/{Username}.txt").read())
+                                    os.remove(os.path.abspath(f"Users/{Username}.txt"))
+                                    print(f"{syslib.Font.GREEN}更改成功!{syslib.Font.WHITE}")
+                                    Username = UsernameNew
+                                elif UsernameNew == "" or UsernameNew.isspace():
+                                    print(f"{syslib.Font.RED}在试图更改用户名时报错:{syslib.Font.YELLOW}用户名为空!{syslib.Font.WHITE}")
+                                elif UsernameNew in syslib.ListUsers():
+                                    print(f"{syslib.Font.RED}在试图更改用户名时报错:{syslib.Font.YELLOW}用户名已存在!{syslib.Font.WHITE}")
+
+                            # 如果操作命令不是前两者，则显示帮助信息
+                            else:
+                                print("User命令帮助:\n"
+                                      "user show all            列出当前所有用户以及当前登录用户\n"
+                                      "user change password     更换当前账户的密码")
 
                 case 'cls':
                     # 典型的清屏
@@ -301,12 +421,12 @@ class Main:
                     syslib.UserRegister()
 
                 # 处理"su"命令，用于切换用户
-                case _ if cmd.lower().startswith("su "):
+                case "su":
                     # 获取系统中所有的用户名单
                     UserNameList = syslib.ListUsers()
                     if UserNameList != []:
                         # 解析命令行参数，获取目标用户名
-                        tmpUserName = syslib.SplitCommandArguments(cmd, "one")["Command Arguments"]
+                        tmpUserName = args[0]
                         if tmpUserName in UserNameList:
                             # 读取目标用户的密码文件
                             with open(os.path.abspath(f"./Users/{tmpUserName}.txt")) as f:
@@ -330,7 +450,7 @@ class Main:
                         print("只有一个用户!\n请使用'register'命令注册用户")
 
                 case 'sysver':
-                    print(f'系统版本：MayDOS 1.0.0 Normal')
+                    print(f'系统版本：MayDOS 1.1.4.3 Normal')
                     print('开发：MayDOS开发团队 版权所有2023(C)')
 
                 # 添加第三方应用
@@ -376,34 +496,43 @@ class Main:
                             shutil.copy(source_file, target_file)
                             print("重新复制成功")
                 # 当命令为"ls"时，列出当前目录下的文件
-                case _ if cmd.lower() == "ls":
+                case "ls":
+                    if not args:
+                        try:
+                            print(f"当前下的文件：")
+                            for i in syslib.ls(os.getcwd()):
+                                print(i)
+                            print(f"共{len(syslib.ls(os.getcwd()))}个文件。")
+                        except FileNotFoundError:
+                            print(
+                                f"{syslib.Font.RED}尝试访问 {syslib.Font.WHITE}当前目录{syslib.Font.RED} 时报错：{syslib.Font.WHITE}"
+                                f"当前目录 {syslib.Font.YELLOW}不是一个有效的文件夹。{syslib.Font.WHITE}")
+                    else:
+                        # 当命令以"ls "开头时，列出指定目录下的文件
+                        tmpcmd = args[0]
+                        # 检查是否尝试访问系统目录且用户权限非Root，若是，则提示权限不足
+                        if os.path.abspath(tmpcmd).startswith(r"C:\Windows") and AccessManager.GetAccessType() != "Root":
+                            print(
+                                f"{syslib.Font.RED}尝试访问 {syslib.Font.WHITE}{os.path.abspath(tmpcmd)}{syslib.Font.RED} 时报错：{syslib.Font.YELLOW}权限不足。"
+                                f"{syslib.Font.WHITE}")
+                            continue
+                        try:
+                            print(f"{os.path.abspath(tmpcmd)}下的文件：")
+                            for i in syslib.ls(tmpcmd):
+                                print(i)
+                            print(f"共{len(syslib.ls(tmpcmd))}个文件。")
+                        except FileNotFoundError:
+                            print(
+                                f"{syslib.Font.RED}尝试访问 {syslib.Font.WHITE}{os.path.abspath(tmpcmd)}{syslib.Font.RED} 时报错：{syslib.Font.WHITE}"
+                                f"{os.path.abspath(tmpcmd)} {syslib.Font.YELLOW}不是一个有效的文件夹。{syslib.Font.WHITE}")
+
+                case "md":
                     try:
-                        print(f"当前下的文件：")
-                        for i in syslib.ls(os.getcwd()):
-                            print(i)
-                        print(f"共{len(syslib.ls(os.getcwd()))}个文件。")
-                    except FileNotFoundError:
-                        print(
-                            f"{syslib.Font.RED}尝试访问 {syslib.Font.WHITE}当前目录{syslib.Font.RED} 时报错：{syslib.Font.WHITE}"
-                            f"当前目录 {syslib.Font.YELLOW}不是一个有效的文件夹。{syslib.Font.WHITE}")
-                # 当命令以"ls "开头时，列出指定目录下的文件
-                case _ if cmd.lower().startswith("ls "):
-                    tmpcmd = syslib.SplitCommandArguments(cmd, "one")["Command Arguments"]
-                    # 检查是否尝试访问系统目录且用户权限非Root，若是，则提示权限不足
-                    if os.path.abspath(tmpcmd).startswith(r"C:\Windows") and AccessManager.GetAccessType() != "Root":
-                        print(
-                            f"{syslib.Font.RED}尝试访问 {syslib.Font.WHITE}{os.path.abspath(tmpcmd)}{syslib.Font.RED} 时报错：{syslib.Font.YELLOW}权限不足。"
-                            f"{syslib.Font.WHITE}")
-                        continue
-                    try:
-                        print(f"{os.path.abspath(tmpcmd)}下的文件：")
-                        for i in syslib.ls(tmpcmd):
-                            print(i)
-                        print(f"共{len(syslib.ls(tmpcmd))}个文件。")
-                    except FileNotFoundError:
-                        print(
-                            f"{syslib.Font.RED}尝试访问 {syslib.Font.WHITE}{os.path.abspath(tmpcmd)}{syslib.Font.RED} 时报错：{syslib.Font.WHITE}"
-                            f"{os.path.abspath(tmpcmd)} {syslib.Font.YELLOW}不是一个有效的文件夹。{syslib.Font.WHITE}")
+                        os.mkdir(args[0])
+                    except FileExistsError:
+                        print(syslib.Font.RED + "该文件夹已经存在！" + syslib.Style.END)
+                    except Exception:
+                        print(syslib.Font.RED + "无法识别您的输入！" + syslib.Style.END)
 
                 case 'shut':
                     # 真的关机
@@ -420,15 +549,58 @@ class Main:
                     pass
 
                 case _:
-                    List_RAN = ['MayDOS有摸鱼部门和搞事部门！', '0.4.1是0.4.2之前最多BUG的版本',
-                                'MayDOS其实从0.4.0开始就有可安装版本了呢~', 'MayDOS的安装版本自动更新会报错！',
-                                'MayDOS现在已经有很多人参与开发了呢', 'MayDOS的开发人员似乎对MayDOS没有激情',
-                                'MayDOS的软件API其实和TinOS一样', 'MayDOS的软件可以无缝移植到TinOS哦!~',
-                                '其实OOBE中的更新通道仔细一看就感觉不对劲', '你知道MayDOS其实在0.4以后有了阁小小的GUI吗？',
-                                '移除了HIM']
-                    print(
-                        f"{syslib.Font.RED}未定义的指令{syslib.Font.YELLOW} {cmd} {syslib.Font.RED}，请输入'usebook'以查看使用手册和帮助{syslib.Font.WHITE}")
-                    print("Tips: ", random.choice(List_RAN))
+                    fuck_list = [
+                        "usebook",
+                        "md",
+                        "shut",
+                        "ls",
+                        "calc",
+                        "notepad",
+                        "minesweeper",
+                        "cls",
+                        "sysver",
+                        "sudo",
+                        "su",
+                        "reboot",
+                        "cat",
+                        "register",
+                        "cp",
+                        "md",
+                        "top",
+                        "add",
+                        "user",
+                        "exit",
+                        "uitheme",
+                        "cd"
+                    ]
+                    for i in range(len(cmd) - 1):
+                        if cmd[:i] + cmd[i + 1] + cmd[i] + cmd[i + 2:] in fuck_list:
+                            did_you_mean = input(
+                                "你是说 " + cmd[:i] + cmd[i + 1] + cmd[i] + cmd[i + 2:] + " ".join(
+                                    [""] + args if args else args) + " 吗？(y/n)")
+                            if did_you_mean == "y":
+                                cmd = cmd[:i] + cmd[i + 1] + cmd[i] + cmd[i + 2:] + " ".join(
+                                    [""] + args if args else args)
+                                fuck = True
+                            break
+                    else:
+                        for i in range(len(cmd)):
+                            if cmd[:i] + cmd[i + 1:] in fuck_list:
+                                did_you_mean = input(
+                                    "你是说 " + cmd[:i] + cmd[i + 1:] + " ".join([""] + args if args else args) + " 吗？(y/n)")
+                                if did_you_mean == "y":
+                                    cmd = cmd[:i] + cmd[i + 1:] + " ".join([""] + args if args else args)
+                                    fuck = True
+                                break
+                        else:
+                            List_RAN = ['MayDOS有摸鱼部门和搞事部门！', '0.4.1是0.4.2之前最多BUG的版本',
+                                        'MayDOS其实从0.4.0开始就有可安装版本了呢~', 'MayDOS的安装版本自动更新会报错！',
+                                        'MayDOS现在已经有很多人参与开发了呢', 'MayDOS的开发人员似乎对MayDOS没有激情',
+                                        'MayDOS的软件API其实和TinOS一样', 'MayDOS的软件可以无缝移植到TinOS哦!~',
+                                        '你知道MayDOS其实在0.4以后有了阁小小的GUI吗？', '移除了HIM']
+                            print(
+                                f"{syslib.Font.RED}未定义的指令{syslib.Font.YELLOW} {cmd} {syslib.Font.RED}，请输入'usebook'以查看使用手册和帮助{syslib.Font.WHITE}")
+                            print("Tips: ", random.choice(List_RAN))
 
 
 Main = Main()

@@ -1,5 +1,10 @@
 ## MayDOS 更新日志
-
+* 1.1.4
+  * 添加了uithemes set <文件名>命令，用于自定义MayDOS的界面，执行代码后立即生效
+  * 添加了uithemes reset命令，用于重置MayDOS的界面为初始界面
+  * 更新了扫雷
+  * 更新了计算器界面
+  
 * 1.1.3
   * 使用sha256增加了用户密码加密功能
 
@@ -23,6 +28,7 @@
   * 加入命令: user show all、user password change两个命令，具体可以自己用一下，一个是显示当前登录用户和所有用户，一个是更改当前用户的密码，立即生效。
   * 加入了新的API: 类SystemAccessManager，以后用于管理系统权限，有两个方法:GetAccessType和SetAccessType
   * 加入了新的命令: ls
+
 * 1.0.0 Fixed some bugs
   * 重构MayDOS，包括以下内容
     * 删除了部分程序文件

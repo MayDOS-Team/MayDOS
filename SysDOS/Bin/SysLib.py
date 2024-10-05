@@ -69,7 +69,7 @@ def ListUsers():
     # 初始化一个空列表，用于存储用户名称
     UserNameList = []
     # 遍历"Users"目录下的所有文件和文件夹
-    for i in os.listdir(os.path.abspath("./Users")):
+    for i in os.listdir(os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + "../../../Users")):
         # 检查文件是否以".txt"结尾
         if i.endswith(".txt"):
             # 如果是文本文件，则提取文件名（即用户名称），并将其添加到列表中
@@ -140,6 +140,50 @@ def UserRegister():
                 f.close()
                 break
         break  # 跳出外层循环，结束注册过程
+
+def Color_Replace(Original_String: str):
+    """
+    颜色更改函数，用于自定义命令行界面。
+    参数:
+    Original_String(str)：表示格式化的命令行自定义文件读取之后的格式化代码
+    输出：
+    Output_String(str)：输出后可以直接用的命令行样式
+    """    
+    COLOR_SET = {r"%BLACK": "\x1b[30m",
+                r"%RED": "\x1b[31m",
+                r"%GREEN": "\x1b[32m",
+                r"%YELLOW": "\x1b[33m",
+                r"%BLUE": "\x1b[34m",
+                r"%VIOLET": "\x1b[35m",
+                r"%BEIGE": "\x1b[36m",
+                r"%WHITE": "\x1b[37m",
+                r"%BOLD": "\x1b[1m",
+                r"%END": "\x1b[0m"}
+    Output_String = Original_String
+    for form in COLOR_SET: Output_String = Output_String.replace(form, COLOR_SET[form]) 
+    return Output_String
+
+def DeColor_Replace(Original_String: str):
+    """
+    颜色更改函数，用于自定义命令行界面。
+    参数:
+    Original_String(str)：表示格式化的命令行自定义文件读取之后的格式化代码
+    输出：
+    Output_String(str)：输出后可以直接用的命令行样式
+    """    
+    COLOR_SET = {r"%BLACK": "\x1b[30m",
+                r"%RED": "\x1b[31m",
+                r"%GREEN": "\x1b[32m",
+                r"%YELLOW": "\x1b[33m",
+                r"%BLUE": "\x1b[34m",
+                r"%VIOLET": "\x1b[35m",
+                r"%BEIGE": "\x1b[36m",
+                r"%WHITE": "\x1b[37m",
+                r"%BOLD": "\x1b[1m",
+                r"%END": "\x1b[0m"}
+    Output_String = Original_String
+    for form in COLOR_SET: Output_String = Output_String.replace(COLOR_SET[form], form) 
+    return Output_String
 
 
 def SplitCommandArguments(CommandToSplit, CommandSplitType="all", SplitPoint=None):
@@ -286,8 +330,10 @@ def ls(cmd):
     # 获取目录列表
     directory_list = os.listdir(abs_path)
 
-    # 添加创建时间信息
-    creation_time = time.ctime(os.path.getctime(abs_path))
-    decorated_list = [f"{item}\t\x1b[32m<{creation_time}>\x1b[0m" for item in directory_list]
+    decorated_list = [
+        f"{item}\t\x1b[32m<{time.ctime(os.path.getctime(os.path.join(abs_path, item)))}>\x1b[0m" if os.path.isfile(
+            os.path.join(abs_path,
+                         item)) else f"{item}\t\x1b[32m<{time.ctime(os.path.getctime(os.path.join(abs_path, item)))}>\x1b[0m  ->[folder]"
+        for item in directory_list]
 
     return decorated_list

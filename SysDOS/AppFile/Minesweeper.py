@@ -1,189 +1,124 @@
-import random, time, os
+import random, time
 
-os.system('cls')
-
-print('欢迎使用由MayDOS制作的扫雷游戏.')
-
-ch = input("1-开始游戏\n2-退出游戏\n请选择：")
-
-
-class MinesweeperTimer:
-    def __init__(self):
-        self.start_time = None
-
-    def start(self):
-        """启动计时器"""
-        self.start_time = time.time()
-
-    def stop(self):
-        """停止计时器"""
-        self.start_time = None  # 重置计时器
-
-    def elapsed_time(self):
-        """返回经过的时间（秒），如果计时器未启动则返回 0"""
-        if self.start_time is None:
-            return 0
-        return time.time() - self.start_time
-
-    def formatted_time(self):
-        """返回格式化后的时间字符串 x时x分x秒"""
-        elapsed_seconds = int(self.elapsed_time())
-        hours, remainder = divmod(elapsed_seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        return f"{hours}时{minutes}分{seconds}秒"
-
-
-timer = MinesweeperTimer()
-
-
-def create_board(rows, cols, num_mines):
-    board = [[' ' for _ in range(cols)] for _ in range(rows)]
-    mine_locations = random.sample(range(rows * cols), num_mines)
-    for loc in mine_locations:
-        row = loc // cols
-        col = loc % cols
-        board[row][col] = 'X'
-    return board
-
-
-def get_adjacent_mines(board, rows, cols):
-    count = 0
-    rows = len(board)
-    cols = len(board[0])
-
-    for i in range(max(0, rows - 1), min(rows, rows + 2)):
-        for j in range(max(0, cols - 1), min(cols, cols + 2)):
-            if board[i][j] == 'X':
-                count += 1
-
-    return count
-
-
-def print_board(board):
-    rows = len(board)
-    cols = len(board[0])
-
-    print('   ', end='')
-    for i in range(cols):
-        print(f'{i} ', end='')
+print('新·扫雷,之前的扫雷有点bug')
+print('欢迎来玩由MayOS团队制作的扫雷')
+time.sleep(0.6)
+print('1.创建一个新游戏')
+print('任意键退出游戏')
+a = input()
+if a == '1':
+    pass
+else:
+    quit()
+time.sleep(0.5)
+print('请稍后，正在生成地图')
+time.sleep(1)
+game_map1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
+game_map = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
+sum = 0
+number_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+for i in range(100):
+    r = random.randint(1, 6)
+    if r == 1:
+        game_map[i] = 'x'
+        sum += 1
+remaining_block = 100 - sum
+while True:
+    print('有' + str(sum) + '个雷')
+    print('    1 2 3 4 5 6 7 8 9 10')
     print()
-
-    print('  +' + '---' * cols)
-
-    for i in range(rows):
-        print(f'{i} |', end='')
-        for j in range(cols):
-            print(f'{board[i][j]} ', end='')
+    for i in range(10):
+        print(i + 1, end = '')
+        if i <= 9:
+            print(end = '   ')
+        else:
+            print(end = ' ')
+        for j in range(10):
+            print(game_map1[(i * 10 + j) - 1], end = ' ')
         print()
-
-    print('  +' + '---' * cols)
-
-
-def play_game():
-    global ch, col, row
-    while True:
-        if ch == '1':
-            game_mode = str(
-                input("请选择游戏模式：\n1-初级（Beginner）\n2-中级（Intermediate）\n3-高级（Expert）\n4-自定义（Customized）\n请选择："))
-            if game_mode == '1':
-                print("你选择了初级（Beginner）模式！\n此模式拥有9行9列，10个地雷")
-                rows, cols, num_mines = 9, 9, 10
-                print("游戏开始！")
-                break
-
-            elif game_mode == '2':
-                print("你选择了中级（Intermediate）模式！\n此模式拥有16行16列，40个地雷")
-                rows, cols, num_mines = 16, 16, 40
-                print("游戏开始！")
-                break
-
-            elif game_mode == '3':
-                print("你选择了高级（Expert）模式！\n此模式拥有30行16列，99个地雷")
-                rows, cols, num_mines = 30, 16, 99
-                print("游戏开始！")
-                break
-
-            elif game_mode == '4':
-                print("你选择了自定义（Customized）模式！\n请输入行数、列数和地雷数量")
-                rows = int(input("请输入行数："))
-                cols = int(input("请输入列数："))
-                num_mines = int(input("请输入地雷数量："))
-                if num_mines < rows * cols * 0.15:
-                    print("地雷数量不能小于格子总数的15%！")
-                    return
-                if num_mines > rows * cols * 0.25:
-                    print("地雷数量不能大于格子总数的25%！")
-                    return
-                if num_mines < 1:
-                    print("地雷数量不能小于1！")
-                    return
-                if rows < 1 or cols < 1:
-                    print("行数和列数不能小于1！")
-                    return
-                if rows > 50 or cols > 50:
-                    print("行数和列数不能大于50！")
-                    return
-                print("恭喜你已经完成所有步骤")
-                print("你选择了高级（Expert）模式！\n此模式拥有 " + str(rows) + " 行 " + str(cols) + " 列， " + str(num_mines) + " 个地雷")
-                print("游戏开始！")
-                break
-
-            elif game_mode not in ['1', '2', '3', '4']:
-                print("无效的选择，请重新输入")
-                return
-        elif ch == '2':
-            print("游戏结束！")
-            exit()
+    print('请输入列号空格行号')
+    an = input().split()
+    try:
+        x = int(an[0])
+        y = int(an[1])
+    except:
+        print('请输入规范的行号, 如 1 1')
+        continue
+    if len(an) != 2:
+        print('请输入规范的行号, 如 1 1')
+        continue
+    elif x not in number_list or y not in number_list:
+        print('请输入规范的行号, 如 1 1')
+        continue
+    else:
+        b = (y - 1) * 10 + x - 1
+        print(b)
+        if game_map[b] == 'x':
+            print('你踩到雷了!')
+            print('    1 2 3 4 5 6 7 8 9 10')
+            print()
+            for i in range(10):
+                print(i + 1, end='')
+                if i <= 9:
+                    print(end='   ')
+                else:
+                    print(end=' ')
+                for j in range(10):
+                    print(game_map[(i * 10 + j) - 1], end=' ')
+                print()
+            time.sleep(5)
+            quit()
         else:
-            print("无效的选择，请重新输入")
-            return
-
-    if rows < 1 or cols < 1:
-        print("行数和列数不能小于1！")
-        exit()
-    if rows > 50 or cols > 50:
-        print("行数和列数不能大于50！")
-        exit()
-    if num_mines < 1:
-        print("地雷数量不能小于1！")
-        exit()
-
-    board = create_board(rows, cols, num_mines)
-    visible = [[0 for _ in range(cols)] for _ in range(rows)]
-
-    game_over = False
-    # timer.start()
-
-    return board, visible, game_over
-
-
-re_board, re_visible, re_game_over = play_game()
-
-
-# 判断游戏是否触雷，如果触雷则结束游戏，否则继续游戏，直到游戏结束，输出最终结果
-def game_rule():
-    global re_board, re_visible, re_game_over
-    board = re_board
-    visible = re_visible
-    game_over = re_game_over
-    while not game_over:
-        print_board(visible)
-        row = int(input("请输入行号："))
-        col = int(input("请输入列号："))
-        os.system("cls")
-
-        if board[row][col] == 'X':
-            os.system("cls")
-            print('游戏结束，您触雷了！')
-            game_over = True
-
-        else:
-            count = get_adjacent_mines(board, row, col)
-            visible[row][col] = str(count)
-
-    print_board(board)
-
-
-if __name__ == "__main__":
-    play_game()
-    game_rule()
+            block_list = [-11, -10, -9, -1, 1, 9, 10, 11]
+            block_list1 = [-11, -10, -1, 9, 10]
+            block_list2 = [-10, -9, 1]
+            block_list3 = [-11, -10, -9, -1, 1]
+            block_list4 = [-11, -10, -1]
+            bomb = 0
+            if b <= 88:
+                for i in range(8):
+                    if game_map[b + block_list[i]] == 'x':
+                        bomb += 1
+            elif b == 89:
+                for i in range(5):
+                    if game_map[b + block_list1[i]] == 'x':
+                        bomb += 1
+            elif b == 90:
+                for i in range(3):
+                    if game_map[b + block_list2[i]] == 'x':
+                        bomb += 1
+            elif b >= 91 and b <= 98:
+                for i in range(5):
+                    if game_map[b + block_list3[i]] == 'x':
+                        bomb += 1
+            elif b == 99:
+                for i in range(3):
+                    if game_map[b + block_list4[i]] == 'x':
+                        bomb += 1
+            if bomb >= 1:
+                game_map1[b - 1] = bomb
+            else:
+                game_map1[b - 1] = 9
+            remaining_block -= 1
+    if remaining_block == 0:
+        print('你赢了!')
+        time.sleep(10)
+        quit()
